@@ -1,0 +1,10 @@
+{
+  "autoload": {
+    "psr-4": {
+      "AbcTravels\\": "src"
+    }
+  },
+  "require": {
+    "phpmailer/phpmailer": "^6.8"
+  }
+}
