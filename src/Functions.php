@@ -44,11 +44,11 @@ EOQ;
     public static function getTourDaysDropdownOptions($tourDays=0)
     {
         $start = 3;
-        $end = 14;
+        $end = 15;
         $options = <<<EOQ
         <option value=""></option>
 EOQ;
-        for($i=$start; $i<$end; $i++)
+        for($i=$start; $i<=$end; $i++)
         {
             $selected = '';
             if (doTypeCastInt($tourDays) > 0)

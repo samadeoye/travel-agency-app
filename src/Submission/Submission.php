@@ -108,13 +108,14 @@ EOQ;
         </div>
 EOQ;
         
+        $subject = getSubmissionType($typeId);
         $arParams = [
             'mailTo' => $arSiteSettings['booking_email'],
             'toName' => 'Admin',
             'mailFrom' => $email,
             'fromName' => $name,
             'arCC' => [$arSiteSettings['email']],
-            'subject' => getSubmissionType($typeId),
+            'subject' => self::getEmailSubject($subject),
             'isHtml' => true,
             'bodyHtml' => $bodyHtml
         ];
@@ -173,13 +174,10 @@ EOQ;
             'mailFrom' => $email,
             'fromName' => $name,
             'arCC' => [$arSiteSettings['email']],
+            'subject' => self::getEmailSubject($subject),
             'isHtml' => true,
             'bodyHtml' => $bodyHtml
         ];
-        if ($subject != '')
-        {
-            $arParams['subject'] = $subject;
-        }
         SendMail::sendMail($arParams);
 
         $data['id'] = getNewId();
@@ -252,7 +250,7 @@ EOQ;
             'mailFrom' => $email,
             'fromName' => $name,
             'arCC' => [$arSiteSettings['email']],
-            'subject' => $type,
+            'subject' => self::getEmailSubject($type),
             'isHtml' => true,
             'bodyHtml' => $bodyHtml
         ];
@@ -453,5 +451,17 @@ EOQ;
         }
 
         return $output;
+    }
+
+    protected static function getEmailSubject($text)
+    {
+        global $arSiteSettings;
+
+        $subject = "Mail From ".$arSiteSettings['name'];
+        if ($text != '')
+        {
+            $subject .= " - $text";
+        }
+        return $subject;
     }
 }
