@@ -310,9 +310,8 @@ function getRecaptcha()
     }
 }
 
-EOQ;
-$arAdditionalJsOnLoad[] = <<<EOQ
-setTimeout(function() {
+function showNotification()
+{
     var lblPeople = 'people';
     var lblIsAre = 'are';
     var numOfPeople = arnNumOfPeople[(Math.floor(Math.random() * arnNumOfPeople.length))];
@@ -322,7 +321,17 @@ setTimeout(function() {
         lblIsAre = 'is';
     }
     throwInfo(numOfPeople + ' ' + lblPeople + ' ' + lblIsAre + ' checking this tour', 'toast-bottom-left');
-}, 3000);
+}
+
+EOQ;
+$arAdditionalJsOnLoad[] = <<<EOQ
+setTimeout(function() {
+    showNotification();
+}, 4000);
+
+setInterval(function() {
+    showNotification();
+}, 25000);
 
 $("#enquireNowBtn").click(function(){
     $('#enquireNowModal').modal('show');

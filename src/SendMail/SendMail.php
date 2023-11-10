@@ -17,18 +17,6 @@ class SendMail
 
         try
         {
-            //Server settings
-            /*
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->isSMTP();
-            $mail->Host       = 'mail.woara.ng';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'info@woara.ng';
-            $mail->Password   = 'InfoWoAraLive!@#123';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port       = 465;
-            */
-            
             $mail->isMail();
 
             $mailTo = $arParams['mailTo'];
