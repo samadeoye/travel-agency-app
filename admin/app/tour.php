@@ -8,7 +8,7 @@ $formAction = 'addtour';
 $rs = [];
 $title = $destinationId = $days = $inclusions = $summary = $mapIframe = '';
 $itenaryContent = '';
-$price = $itenaryDay = $itenaryDayCount = $isSpecialPackage = 0;
+$price = $itenaryDay = $itenaryDayCount = $isSpecialPackage = $addNotification = 0;
 $id = isset($_GET['id']) ? trim($_GET['id']) : '';
 if (strlen($id) == 36)
 {
@@ -24,7 +24,8 @@ if (strlen($id) == 36)
         $inclusions = $rs['inclusions'];
         $summary = $rs['summary'];
         $mapIframe = $rs['map'];
-        $isSpecialPackage = $rs['special_package'];
+        $isSpecialPackage = doTypeCastInt($rs['special_package']);
+        $addNotification = doTypeCastInt($rs['add_notification']);
         if ($rs['itenary_title'] != '')
         {
             $arFields = [
@@ -120,6 +121,12 @@ require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
                                     <label for="specialPackage">Special Package?</label>
                                     <select name="specialPackage" id="specialPackage" name="specialPackage" class="form-control">
                                         <?php echo Functions::getYesOrNoDropdown($isSpecialPackage); ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addNotification">Add Notification?</label>
+                                    <select name="addNotification" id="addNotification" name="addNotification" class="form-control">
+                                        <?php echo Functions::getYesOrNoDropdown($addNotification); ?>
                                     </select>
                                 </div>
                                 <div class="row">

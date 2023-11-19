@@ -53026,3 +53026,9 @@ a.text-muted:hover {
   height: 100px;
   object-fit: cover;
 }
+
+#analyticsChart
+{
+  width: 100%; 
+  min-height: 450px;
+}

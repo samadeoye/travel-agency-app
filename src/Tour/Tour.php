@@ -13,7 +13,7 @@ class Tour
     public static function getToursHomePage($arFields=['*'], $limit=0, $typeId='')
     {
         $fields = is_array($arFields) ? implode(',', $arFields) : $arFields;
-        $order = 'cdate DESC';
+        $order = 'days ASC';
         if ($typeId == 'dropdown')
         {
             $order = 'name ASC';
@@ -103,6 +103,7 @@ class Tour
         {
             return 'No tour found';
         }
+        $arnNumOfPeople = [1,2,3];
         $output = '';
         foreach($rs as $r)
         {
@@ -110,6 +111,25 @@ class Tour
             $imgPath = 'images/tour/'.$img;
             $shortName = $r['short_name'];
             $title = stringToTitle($r['title']);
+            $days = doTypeCastInt($r['days']);
+            $price = doNumberFormat($r['price']);
+            $notification = '';
+            if (doTypeCastInt($r['add_notification']))
+            {
+                $lblPeople = 'people';
+                $lblIsAre = 'are';
+                $randomKey = array_rand($arnNumOfPeople,1);
+                $numOfPeople = $arnNumOfPeople[$randomKey];
+                if ($numOfPeople == 1)
+                {
+                    $lblPeople = 'person';
+                    $lblIsAre = 'is';
+                }
+                $msg = "$numOfPeople $lblPeople $lblIsAre checking this tour";
+                $notification = <<<EOQ
+                <span class='badge bg-info'><i class='fas fa-eye'></i> $msg</span>
+EOQ;
+            }
             $output .= <<<EOQ
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                 <div class="location-card style-2">
@@ -117,10 +137,37 @@ class Tour
                         <div class="image-inner tourImgWrapper">
                             <a href="tour-details?package={$shortName}"><img src="{$imgPath}" alt="{$title}"></a>
                         </div>
+                        <div class="rating">
+                            <div class="ratting-inner">
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="content-wrapper">
                         <div class="content-inner">
+                            {$notification}
+                            <span class="font-size-15 text-secondary">From</span>
+                            <h5 class="price" style="padding-bottom:0px;">$$price <span class="font-size-15 text-secondary">Per person</span></h5>
                             <span class="content-title"><a href="tour-details?package={$shortName}" class="font-size-20">{$title}</a></span>
+                            <span class="badge bg-theme"><i class="fa-solid fa-clock"></i> {$days} Days</span>
+                            <div class="time-zone">
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-bed"></i>
+                                </div>
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-plane-up"></i>
+                                </div>
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-car"></i>
+                                </div>
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-utensils"></i>
+                                </div>
+                            </div>
                             <div class="btn-wrapper">
                                 <a href="tour-details?package={$shortName}" class="theme-btn theme-btn-padding-2">More Information <i class="fa-solid fa-arrow-right"></i></a>
                             </div>
@@ -434,6 +481,7 @@ EOQ;
         {
             return 'No special tours found';
         }
+        $arnNumOfPeople = [1,2,3];
         $output = '';
         foreach($rs as $r)
         {
@@ -442,6 +490,24 @@ EOQ;
             $shortName = $r['short_name'];
             $title = stringToTitle($r['title']);
             $days = doTypeCastInt($r['days']);
+            $price = doNumberFormat($r['price']);
+            $notification = '';
+            if (doTypeCastInt($r['add_notification']))
+            {
+                $lblPeople = 'people';
+                $lblIsAre = 'are';
+                $randomKey = array_rand($arnNumOfPeople,1);
+                $numOfPeople = $arnNumOfPeople[$randomKey];
+                if ($numOfPeople == 1)
+                {
+                    $lblPeople = 'person';
+                    $lblIsAre = 'is';
+                }
+                $msg = "$numOfPeople $lblPeople $lblIsAre checking this tour";
+                $notification = <<<EOQ
+                <span class='badge bg-info'><i class='fas fa-eye'></i> $msg</span>
+EOQ;
+            }
             $output .= <<<EOQ
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                 <div class="location-card style-2">
@@ -449,11 +515,37 @@ EOQ;
                         <div class="image-inner tourImgWrapper">
                             <a href="tour-details?package={$shortName}"><img src="{$imgPath}" alt="{$title}"></a>
                         </div>
+                        <div class="rating">
+                            <div class="ratting-inner">
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                                <span><i class="fa-solid fa-star"></i></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="content-wrapper">
                         <div class="content-inner">
+                            {$notification}
+                            <span class="font-size-15 text-secondary">From</span>
+                            <h5 class="price" style="padding-bottom:0px;">$$price <span class="font-size-15 text-secondary">Per person</span></h5>
                             <span class="content-title"><a href="tour-details?package={$shortName}" class="font-size-20">{$title}</a></span>
                             <span class="badge bg-theme"><i class="fa-solid fa-clock"></i> {$days} Days</span>
+                            <div class="time-zone">
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-bed"></i>
+                                </div>
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-plane-up"></i>
+                                </div>
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-car"></i>
+                                </div>
+                                <div class="time-zone-inner">
+                                    <i class="fa-solid fa-utensils"></i>
+                                </div>
+                            </div>
                             <div class="btn-wrapper">
                                 <a href="tour-details?package={$shortName}" class="theme-btn theme-btn-padding-2">More Information <i class="fa-solid fa-arrow-right"></i></a>
                             </div>

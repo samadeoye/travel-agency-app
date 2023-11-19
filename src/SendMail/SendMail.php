@@ -4,10 +4,13 @@ namespace AbcTravels\SendMail;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use SendGrid;
+use SendGrid\Mail\Mail;
 
 class SendMail
 {
     static $isSent = false;
+    
     public static function sendMail($arParams)
     {
         global $arSiteSettings;
@@ -17,6 +20,18 @@ class SendMail
 
         try
         {
+            //Server settings
+            /*
+            $mail->SMTPDebug = 0;//SMTP::DEBUG_SERVER;
+            $mail->isSMTP();
+            $mail->Host       = SMTP_HOST;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = SMTP_USERNAME;
+            $mail->Password   = SMTP_PASSWORD;
+            $mail->SMTPSecure = "ssl";//PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = SMTP_PORT;
+            */
+            
             $mail->isMail();
 
             $mailTo = $arParams['mailTo'];
@@ -26,18 +41,23 @@ class SendMail
             $subject =  (array_key_exists('subject', $arParams)) ? $arParams['subject'] : 'Mail From '.$arSiteSettings['name'];
             $body =  (array_key_exists('body', $arParams)) ? $arParams['body'] : '';
             $bodyHtml =  (array_key_exists('bodyHtml', $arParams)) ? $arParams['bodyHtml'] : '';
-            $addReplyTo = (array_key_exists('addReplyTo', $arParams)) ? $arParams['addReplyTo'] : false;
+            $addReplyTo = (array_key_exists('addReplyTo', $arParams)) ? $arParams['addReplyTo'] : true;
             $isHtml = (array_key_exists('isHtml', $arParams)) ? $arParams['isHtml'] : false;
             $arCC = (array_key_exists('arCC', $arParams)) ? $arParams['arCC'] : [];
             $arBCC = (array_key_exists('arBCC', $arParams)) ? $arParams['arBCC'] : [];
             $arAttachments = (array_key_exists('arAttachments', $arParams)) ? $arParams['arAttachments'] : [];
             
             //Recipients
-            $mail->setFrom($mailFrom, $fromName);
+            //$mail->setFrom($mailFrom, $fromName);
+            $mail->setFrom($arSiteSettings['email'], $arSiteSettings['name'], 0);
             $mail->addAddress($mailTo, $toName);
             if ($addReplyTo)
             {
                 $mail->addReplyTo($mailFrom, $fromName);
+            }
+            if ($arSiteSettings['booking_email'] != '')
+            {
+                $arCC = [$arSiteSettings['booking_email']];
             }
             if (count($arCC) > 0)
             {
@@ -99,7 +119,7 @@ class SendMail
         {
             self::$isSent = false;
             throw new Exception('Message could not be sent');
-            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";exit;
         }
     }
 
@@ -110,14 +130,26 @@ class SendMail
         try
         {
             $mailTo = $arParams['mailTo'];
+            $toName = $arParams['toName'];
             $mailFrom = $arParams['mailFrom'];
             $fromName = $arParams['fromName'];
-            $subject =  (array_key_exists('subject', $arParams)) ? $arParams['subject'] : 'Mail From '.$arSiteSettings['name'];
+            $subject =  $arParams['subject'];
             $body = $arParams['body'];
+            $arCC = (array_key_exists('arCC', $arParams)) ? $arParams['arCC'] : [];
 
-            
-            $emailHeaders = "From: $fromName <$mailFrom>";
-
+            $siteEmail = $arSiteSettings['email'];
+            $emailHeaders = "From: $siteEmail" . "\r\n" . "Reply-To: $mailFrom" . "\r\n";
+            if ($arSiteSettings['booking_email'] != '')
+            {
+                $arCC = [$arSiteSettings['booking_email']];
+            }
+            if (count($arCC) > 0)
+            {
+                foreach($arCC as $ccEmail)
+                {
+                    $emailHeaders .= "Cc: $ccEmail\r\n";
+                }
+            }
             if (mail($mailTo, $subject, $body, $emailHeaders))
             {
                 self::$isSent = true;
@@ -130,7 +162,61 @@ class SendMail
         catch(Exception $e)
         {
             self::$isSent = false;
-            getJsonRow(false, 'An error occured');
+            //echo $e->getMessage();exit;
+            throw new Exception('An error occured');
+        }
+    }
+
+    public static function sendCustomMail($arParams)
+    {
+        global $arSiteSettings;
+
+        $mailTo = $arParams['mailTo'];
+        $toName = $arParams['toName'];
+        $mailFrom = $arParams['mailFrom'];
+        $fromName = $arParams['fromName'];
+        $subject =  $arParams['subject'];
+        $body = $arParams['body'];
+
+        $arCC = [];
+        if ($arSiteSettings['booking_email'] != '')
+        {
+            $mailTo = $arSiteSettings['booking_email'];
+            $toName = 'Booking Admin';
+            $arCC = [$arSiteSettings['email']];
+        }
+        
+        $email = new Mail(); 
+        $email->setFrom($mailFrom, $fromName);
+        $email->setSubject($subject);
+        $email->addTo($mailTo, $toName);
+        if (count($arCC) > 0)
+        {
+            foreach($arCC as $ccEmail)
+            {
+                $email->addCc($ccEmail);
+            }
+        }
+        $email->addContent("text/plain", $body);
+        $sendgrid = new SendGrid(DEF_SENDGRID_API_KEY);
+        try
+        {
+            $response = $sendgrid->send($email);
+            /*
+            print $response->statusCode() . "\n";
+            print_r($response->headers());
+            print $response->body() . "\n";
+            exit;
+            */
+            if(substr($response->statusCode(), 0, 1) == 2)
+            {
+                self::$isSent = true;
+            }
+        }
+        catch (Exception $e)
+        {
+            //echo 'Caught exception: '. $e->getMessage() ."\n";
+            throw new Exception('An error occured.');
         }
     }
 }

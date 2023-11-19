@@ -153,6 +153,18 @@ $arCurrentPage = getCurrentPageAdmin($pageTitle);
             </a>
           </li>
           <li class="nav-item py-2">
+            <a href="app/analytics" class="nav-link <?php echo $arCurrentPage['analytics'];?>">
+              <i class="nav-icon fas fa-chart-bar"></i>
+              <p>Analytics</p>
+            </a>
+          </li>
+          <li class="nav-item py-2">
+            <a href="app/homesliders" class="nav-link <?php echo $arCurrentPage['homepagesliders'];?>">
+              <i class="nav-icon fas fa-images"></i>
+              <p>Homepage Sliders</p>
+            </a>
+          </li>
+          <li class="nav-item py-2">
             <a href="app/profile" class="nav-link <?php echo $arCurrentPage['profile'];?>">
               <i class="nav-icon fas fa-user"></i>
               <p>Profile</p>

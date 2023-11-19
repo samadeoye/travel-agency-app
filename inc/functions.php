@@ -396,8 +396,10 @@ function getCurrentPageAdmin($pageTitle)
     'alltours' => '',
     'submissions' => '',
     'submission' => '',
+    'analytics' => '',
     'vehicles' => '',
     'termsandconditions' => '',
+    'homepagesliders' => '',
     'profile' => '',
     'settings' => '',
     'changepassword' => ''
@@ -435,6 +437,12 @@ function getCurrentPageAdmin($pageTitle)
     break;
     case 'termsandconditions':
       $arCurrentPage['termsandconditions'] = $lblActive;
+    break;
+    case 'analytics':
+      $arCurrentPage['analytics'] = $lblActive;
+    break;
+    case 'homepagesliders':
+      $arCurrentPage['homepagesliders'] = $lblActive;
     break;
     case 'profile':
       $arCurrentPage['profile'] = $lblActive;

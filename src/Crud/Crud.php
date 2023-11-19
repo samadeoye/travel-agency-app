@@ -135,7 +135,7 @@ class Crud
             $values = array_merge($values, $valuesx);
         }
 
-        if(array_key_exists('search', $data))
+        if (array_key_exists('search', $data))
         {
             $i = 0;
             $where .= empty($where) ? " WHERE" : " AND";
@@ -148,11 +148,16 @@ class Crud
             $values = array_merge($values, $valuesx);
         }
 
-        if(array_key_exists('order', $data))
+        if (array_key_exists('group', $data))
+        {
+            $where .= " GROUP BY ". $data['group'];
+        }
+
+        if (array_key_exists('order', $data))
         {
             $where .= " ORDER BY ". $data['order'];
         }
-        if(array_key_exists("limit", $data))
+        if (array_key_exists("limit", $data))
         {
             $where .= " LIMIT ". $data['limit'];
         }

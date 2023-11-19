@@ -20,4 +20,6 @@ define('DEF_TBL_SETTINGS', 'settings');
 define('DEF_TBL_SUBMISSIONS', 'submissions');
 define('DEF_TBL_TERMS', 'terms');
 define('DEF_TBL_VEHICLES', 'vehicles');
+define('DEF_TBL_ANALYTICS', 'analytics');
+define('DEF_TBL_IMAGE_SLIDERS', 'image_sliders');
 ?>

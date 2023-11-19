@@ -280,17 +280,14 @@ class Param
                         'length' => [10,0],
                         'label' => 'Recaptcha',
                         'required' => true
-                    ]
-                ];
-                if ($action == 'addTourEnquiry')
-                {
-                    $data['message'] = [
+                    ],
+                    'message' => [
                         'method' => 'post',
                         'length' => [10,0],
                         'label' => 'Message',
                         'required' => false
-                    ];
-                }
+                    ]
+                ];
             break;
 
             case 'addContact':

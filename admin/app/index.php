@@ -3,8 +3,7 @@ require_once '../../inc/utils.php';
 $pageTitle = 'Dashboard';
 
 $arAdditionalCSS[] = <<<EOQ
-<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<script src="https://www.gstatic.com/charts/loader.js"></script>
 EOQ;
 require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
 
@@ -81,34 +80,13 @@ $arData = AbcTravels\Admin\Dashboard\Dashboard::getDashboardData();
 
         <div class="row">
           <div class="col-md-12">
-            <div class="card card-primary card-tabs">
+            <div class="card card-danger card-tabs">
               <div class="card-header">
-                <h3>Recent Submissions</h3>
-              </div>
-              <div class="m-3">
-                <button class="btn btn-primary btn-sm" id="btnReloadSubmissionsTable"><i class="fas fa-redo"></i> Reload</button>
+                <h3>Web Analytics Chart</h3>
               </div>
               <div class="card-body">
-                <table id="submissionsTable" class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Type</th>
-                      <th>Date Submitted</th>
-                      <th></th>
-                      <!-- <th></th> -->
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th>#</th>
-                      <th>Type</th>
-                      <th>Date Submitted</th>
-                      <th></th>
-                      <!-- <th></th> -->
-                    </tr>
-                  </tfoot>
-                </table>
+                <div id="analyticsChart"></div>
+                <a href="app/analytics" class="btn btn-primary">More Info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
           </div>
@@ -125,13 +103,6 @@ $arData = AbcTravels\Admin\Dashboard\Dashboard::getDashboardData();
 </div>
   
 <?php
-$arAdditionalJsScripts[] = <<<EOQ
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-EOQ;
-
 $arAdditionalJs[] = <<<EOQ
 function deleteSubmission(id)
 {
@@ -167,32 +138,64 @@ function deleteSubmission(id)
   }
   });
 }
+
+var chartRows = [];
+function getAnalyticsChartData()
+{
+    $.ajax({
+        url: 'inc/actions',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            action: 'getanalyticschartdata'
+        },
+        success: function(data)
+        {
+            if (data.status == true)
+            {
+                var chartData = data.data;
+                for (var r of chartData)
+                {
+                    chartRows.push([r['country_name'], parseInt(r['count'])]);
+                }
+                drawAnalyticsChart();
+            }
+            else
+            {
+                console.log(data.msg);
+            }
+        }
+    });
+}
+
+function drawAnalyticsChart()
+{
+    //Create the data table.
+    var datag = new google.visualization.DataTable();
+    datag.addColumn('string', 'Country');
+    datag.addColumn('number', 'Total');
+    
+    datag.addRows(chartRows);
+    //Set chart options
+    var options = {
+        'title': 'Visits to the Website'
+    };
+
+    //Instantiate and draw chart
+    var chart = new google.visualization.PieChart(document.getElementById('analyticsChart'));
+    chart.draw(datag, options);
+}
+
+$(window).resize(function(){
+  drawAnalyticsChart();
+});
+
 EOQ;
 
 $arAdditionalJsOnLoad[] = <<<EOQ
-var submissionsTable = $('#submissionsTable').DataTable({
-  paging: false,
-  ordering: false,
-  info: false,
-  processing: true,
-  autoWidth: false,
-  responsive: true,
-  ajax: 'inc/actions?action=getdashboardsubmissions',
-  columns: [
-    { data: 'sn' },
-    { data: 'type' },
-    { data: 'cdate' },
-    { data: 'details' },
-    //{ data: 'delete' }
-  ],
-  columnDefs: [
-    {"orderable": false, "targets": [3]}
-  ]
-});
-
-$('#btnReloadSubmissionsTable').click(function() {
-  reloadTable('submissionsTable');
-});
+//Load Google Chart
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(getAnalyticsChartData);
 
 EOQ;
 

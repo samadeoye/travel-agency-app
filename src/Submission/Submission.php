@@ -62,14 +62,14 @@ class Submission
             'departureDate' => $departureDate,
             'numAdult' => $numAdult,
             'numChildren' => $numChildren,
-            'childrenAges' => $childrenAges
+            'childrenAges' => $childrenAges,
+            'message' => $message
         ];
 
         $typeId = DEF_SUBMISSION_TYPE_COMMON_ENQUIRY;
         if ($action == 'addTourEnquiry')
         {
             $typeId = DEF_SUBMISSION_TYPE_TOUR_ENQUIRY;
-            $arDetails['message'] = $message;
         }
         $data = [
             'type_id' => $typeId,
@@ -84,42 +84,33 @@ class Submission
         $destination = $rsx['name'];
         $type = getSubmissionType($typeId);
 
-        $bodyHtml = <<<EOQ
-        <div style="padding:20px 15px;">
-            <b>Submission Type: {$type}</b><br><br>
-            <b>Name:</b> {$name}<br>
-            <b>Email:</b> {$email}<br>
-            <b>Mobile:</b> {$mobile}<br>
-            <b>Nationality:</b> {$nationality}<br>
-            <b>Destination:</b> {$destination}<br>
-            <b>Arrival Date:</b> {$arrivalDate}<br>
-            <b>Departure Date:</b> {$departureDate}<br>
-            <b>Number of Adults:</b> {$numAdult}<br>
-            <b>Number of Children:</b> {$numChildren}<br>
-            <b>Ages of Children:</b> {$childrenAges}<br>
-EOQ;
-        if ($action == 'addTourEnquiry')
-        {
-            $bodyHtml .= <<<EOQ
-            <b>Message:</b> {$message}
-EOQ;
-        }
-        $bodyHtml . <<<EOQ
-        </div>
-EOQ;
+        $startingMsg = self::getStartingMessage();
+        $body = $startingMsg;
+        $body .= "Submission Type: $type" . "\r\n";
+        $body .= "Name: $name" . "\r\n";
+        $body .= "Email: $email" . "\r\n";
+        $body .= "Mobile: $mobile" . "\r\n";
+        $body .= "Nationality: $nationality" . "\r\n";
+        $body .= "Destination: $destination" . "\r\n";
+        $body .= "Arrival Date: $arrivalDate" . "\r\n";
+        $body .= "Departure Date: $departureDate" . "\r\n";
+        $body .= "Number of Adults: $numAdult" . "\r\n";
+        $body .= "Number of Children: $numChildren" . "\r\n";
+        $body .= "Ages of Children: $childrenAges" . "\r\n";
+        $body .= "Message: $message" . "\r\n";
         
-        $subject = getSubmissionType($typeId);
         $arParams = [
-            'mailTo' => $arSiteSettings['booking_email'],
-            'toName' => 'Admin',
-            'mailFrom' => $email,
-            'fromName' => $name,
-            'arCC' => [$arSiteSettings['email']],
-            'subject' => self::getEmailSubject($subject),
-            'isHtml' => true,
-            'bodyHtml' => $bodyHtml
+            'mailTo' => $arSiteSettings['email'],
+            'toName' => $arSiteSettings['name'],//'Booking Admin',
+            'mailFrom' => $arSiteSettings['email'],
+            'fromName' => $arSiteSettings['name'],
+            //'arCC' => [$arSiteSettings['booking_email']],
+            'subject' => self::getEmailSubject($type),
+            'body' => $body
         ];
-        SendMail::sendMail($arParams);
+        //SendMail::sendMail($arParams);
+        //SendMail::sendDefaultMail($arParams);
+        SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
         $data['cdate'] = time();
@@ -158,27 +149,24 @@ EOQ;
         //send email
         $type = getSubmissionType(DEF_SUBMISSION_TYPE_CONTACT);
 
-        $bodyHtml = <<<EOQ
-        <div style="padding:20px 15px;">
-            <b>Submission Type:</b> {$type}<br><br>
-            <b>Name:</b> {$name}<br>
-            <b>Email:</b> {$email}<br>
-            <b>Mobile:</b> {$mobile}<br>
-            <b>Subject:</b> {$subject}<br>
-            <b>Message:</b> {$message}
-        </div>
-EOQ;
+        $startingMsg = self::getStartingMessage();
+        $body = $startingMsg;
+        $body .= "Submission Type: $type" . "\r\n";
+        $body .= "Name: $name" . "\r\n";
+        $body .= "Email: $email" . "\r\n";
+        $body .= "Mobile: $mobile" . "\r\n";
+        $body .= "Subject: $subject" . "\r\n";
+        $body .= "Message: $message" . "\r\n";
+
         $arParams = [
-            'mailTo' => $arSiteSettings['booking_email'],
+            'mailTo' => $arSiteSettings['email'],
             'toName' => $arSiteSettings['name'],
-            'mailFrom' => $email,
-            'fromName' => $name,
-            'arCC' => [$arSiteSettings['email']],
+            'mailFrom' => $arSiteSettings['email'],
+            'fromName' => $arSiteSettings['name'],
             'subject' => self::getEmailSubject($subject),
-            'isHtml' => true,
-            'bodyHtml' => $bodyHtml
+            'body' => $body
         ];
-        SendMail::sendMail($arParams);
+        SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
         $data['cdate'] = time();
@@ -230,31 +218,27 @@ EOQ;
         $destination = $rsx['name'];
         $type = getSubmissionType(DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR);
 
-        $bodyHtml = <<<EOQ
-        <div style="padding:20px 15px;">
-            <b>Submission Type:</b> {$type}<br><br>
-            <b>Name:</b> {$name}<br>
-            <b>Email:</b> {$email}<br>
-            <b>Mobile:</b> {$mobile}<br>
-            <b>Nationality:</b> {$nationality}<br>
-            <b>Destination:</b> {$destination}<br>
-            <b>Tour Duration:</b> {$tourDuration}<br>
-            <b>Travelling Date:</b> {$travellingDate}<br>
-            <b>Message:</b> {$message}
-        </div>
-EOQ;
+        $startingMsg = self::getStartingMessage();
+        $body = $startingMsg;
+        $body .= "Submission Type: $type" . "\r\n";
+        $body .= "Name: $name" . "\r\n";
+        $body .= "Email: $email" . "\r\n";
+        $body .= "Mobile: $mobile" . "\r\n";
+        $body .= "Nationality: $nationality" . "\r\n";
+        $body .= "Destination: $destination" . "\r\n";
+        $body .= "Tour Duration: $tourDuration" . "\r\n";
+        $body .= "Travelling Date: $travellingDate" . "\r\n";
+        $body .= "Message: $message" . "\r\n";
 
         $arParams = [
-            'mailTo' => $arSiteSettings['booking_email'],
-            'toName' => 'Admin',
-            'mailFrom' => $email,
-            'fromName' => $name,
-            'arCC' => [$arSiteSettings['email']],
+            'mailTo' => $arSiteSettings['email'],
+            'toName' => $arSiteSettings['name'],
+            'mailFrom' => $arSiteSettings['email'],
+            'fromName' => $arSiteSettings['name'],
             'subject' => self::getEmailSubject($type),
-            'isHtml' => true,
-            'bodyHtml' => $bodyHtml
+            'body' => $body
         ];
-        SendMail::sendMail($arParams);
+        SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
         $data['cdate'] = time();
@@ -431,7 +415,8 @@ EOQ;
                 }
 
                 if (in_array($typeId, [
-                        DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
+                        DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
+                        , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
                         , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
                     ]
                 ))
@@ -451,6 +436,17 @@ EOQ;
         }
 
         return $output;
+    }
+
+    protected static function getStartingMessage()
+    {
+        global $arSiteSettings;
+
+        $siteName = $arSiteSettings['name'];
+
+        $msg = "Hello Team,\r\n";
+        $msg .= "Please see below submission from $siteName" . "\r\n\r\n";
+        return $msg;
     }
 
     protected static function getEmailSubject($text)

@@ -15,6 +15,7 @@ class Vehicle
     {
         $name = stringToUpper(trim($_REQUEST['name']));
         $passengers = trim($_REQUEST['passengers']);
+        $otherDetails = trim($_REQUEST['otherDetails']);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 
         if (Crud::checkDuplicate(self::$table, 'name', $name, $id))
@@ -33,7 +34,8 @@ class Vehicle
         
         $data = [
             'name' => $name,
-            'passengers' => $passengers
+            'passengers' => $passengers,
+            'other_details' => $otherDetails
         ];
         if ($fileName != '')
         {
@@ -212,6 +214,7 @@ EOQ;
             $imgPath = 'images/vehicle/'.$img;
             $name = stringToTitle($r['name']);
             $passengers = $r['passengers'];
+            $otherDetails = $r['other_details'];
             $output .= <<<EOQ
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                 <div class="location-card style-2 tours-section">
@@ -224,6 +227,7 @@ EOQ;
                         <div class="content-inner">
                             <span class="content-title"><a href="javascript:;" onclick="showFullVehicleImg('{$id}')" class="font-size-20">{$name}</a></span>
                             <span class="content-title"><a href="javascript:;" class="font-size-15">{$passengers} passengers</a></span>
+                            <span>{$otherDetails}</span>
                             <div class="btn-wrapper">
                                 <a href="javascript:;" onclick="showFullVehicleImg('{$id}')" class="theme-btn theme-btn-padding-2">View Full Image <i class="fas fa-eye"></i></a>
                             </div>

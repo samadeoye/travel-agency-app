@@ -126,6 +126,10 @@ EOQ;
                 <input type="text" class="form-control" id="childrenAges" name="childrenAges" placeholder="e.g 7, 10, 13">
             </div>
             <div class="col-md-12">
+                <label for="message" class="form-label">Your Message</label>
+                <textarea class="form-control" name="message" id="message" cols="30" rows="4"></textarea>
+            </div>
+            <div class="col-md-12">
                 <div class="googleRecaptcha" id="commonEnquiryFormRecaptcha"></div>
             </div>
             <div class="col-12">

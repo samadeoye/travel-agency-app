@@ -25,6 +25,7 @@ class Tour
         $summary = strip_tags(stripslashes(trim($_REQUEST['summary'])), $allowedTags);
         $mapIframe = trim($_REQUEST['mapIframe']);
         $isSpecialPackage = isset($_REQUEST['specialPackage']) ? doTypeCastInt($_REQUEST['specialPackage']) : 0;
+        $addNotification = isset($_REQUEST['addNotification']) ? doTypeCastInt($_REQUEST['addNotification']) : 0;
 
         $arItenaryDayTextareas = $arItenaryDayTitles = $arItenaryDayAcc = $arItenaryDayAccLink = [];
         $arItenaryDayMealPlans = $arItenaryDayTravelTimes = $arItenaryDayTransferModes = [];
@@ -99,7 +100,8 @@ class Tour
             'itenary_transfer_mode' => $itenaryDayTransferModes,
             'inclusions' => $inclusions,
             'summary' => $summary,
-            'special_package' => $isSpecialPackage
+            'special_package' => $isSpecialPackage,
+            'add_notification' => $addNotification
         ];
         if ($mapIframe != '')
         {

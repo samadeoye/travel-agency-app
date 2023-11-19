@@ -44,11 +44,15 @@ class Login
                     $rs['siteEmail'] = $rsx['email'];
                     $rs['bookingEmail'] = $rsx['booking_email'];
                     $rs['sitePhone'] = $rsx['phone'];
+                    $rs['sitePhoneOthers'] = $rsx['phone_others'];
                     $rs['siteAddress'] = $rsx['address'];
+                    $rs['licenseNumber'] = $rsx['license_number'];
+                    $rs['hotelLink'] = $rsx['hotel_link'];
                     $rs['siteFacebook'] = $rsx['facebook'];
                     $rs['siteTwitter'] = $rsx['twitter'];
                     $rs['siteInstagram'] = $rsx['instagram'];
                     $rs['siteLinkedin'] = $rsx['linkedin'];
+                    $rs['siteYoutube'] = $rsx['youtube'];
                 }
                 //login
                 $_SESSION['user'] = $rs;

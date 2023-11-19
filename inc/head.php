@@ -1,5 +1,6 @@
 <?php
 $arCurrentPage = getCurrentPage($pageTitle);
+AbcTravels\Analytics::logUserAnalytics();
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +87,7 @@ $arCurrentPage = getCurrentPage($pageTitle);
               <div class="header-contact-info">
                   <span><a href="tel:<?php echo $arSiteSettings['phone'];?>"><i class="fa-solid fa-phone"></i><?php echo $arSiteSettings['phone'];?></a></span>
                   <span><a href="mailto:<?php echo $arSiteSettings['email'];?>"><i class="fa-solid fa-envelope"></i><?php echo $arSiteSettings['email'];?></a></span>
-                  <span><span class="contact-info-item"><i class="fa-solid fa-location-dot"></i><?php echo $arSiteSettings['address'];?></span></span>
+                  <span><span class="contact-info-item"><i class="fa-solid fa-clock"></i>24 x 7 Service</span></span>
               </div>
           </div>
           </div>
@@ -97,6 +98,7 @@ $arCurrentPage = getCurrentPage($pageTitle);
               <a href="<?php echo $arSiteSettings['instagram'];?>"><i class="fa-brands fa-instagram"></i></a>
               <a href="<?php echo $arSiteSettings['twitter'];?>"><i class="fa-brands fa-twitter"></i></a>
               <a href="<?php echo $arSiteSettings['linkedin'];?>"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="<?php echo $arSiteSettings['youtube'];?>"><i class="fa-brands fa-youtube"></i></a>
             </div>
           </div>
           </div>
@@ -115,9 +117,9 @@ $arCurrentPage = getCurrentPage($pageTitle);
                     <a href="<?php echo DEF_ROOT_PATH;?>" class="retina-logo"><img src="images/logo/nav-logo.png" alt="logo"/></a>
                   </div> -->
                   <div class="logo">
-                    <a href="<?php echo DEF_ROOT_PATH;?>" class="standard-logo fw-bold"><?php echo $arSiteSettings['name'];?></a>
-                    <a href="<?php echo DEF_ROOT_PATH;?>" class="sticky-logo fw-bold"><?php echo $arSiteSettings['name'];?></a>
-                    <a href="<?php echo DEF_ROOT_PATH;?>" class="retina-logo fw-bold"><?php echo $arSiteSettings['name'];?></a>
+                    <a style="width:9em;" href="<?php echo DEF_ROOT_PATH;?>" class="standard-logo fw-bold"><?php echo $arSiteSettings['name'];?></a>
+                    <a style="width:9em;" href="<?php echo DEF_ROOT_PATH;?>" class="sticky-logo fw-bold"><?php echo $arSiteSettings['name'];?></a>
+                    <a style="width:9em;" href="<?php echo DEF_ROOT_PATH;?>" class="retina-logo fw-bold"><?php echo $arSiteSettings['name'];?></a>
                   </div>
                 </div>
                 <div class="col-xl-10 col-lg-10 col-md-6 col-6 d-flex align-items-center justify-content-end">
@@ -131,6 +133,13 @@ $arCurrentPage = getCurrentPage($pageTitle);
                         <li class="<?php echo $arCurrentPage['tours'];?>"><a href="tours">Tours</a></li>
                         <li class="<?php echo $arCurrentPage['contact'];?>"><a href="contact">Contact</a></li>
                         <li class="<?php echo $arCurrentPage['vehicles'];?>"><a href="vehicles">Vehicles</a></li>
+                        <?php
+                        if ($arSiteSettings['hotel_link'] != '')
+                        { ?>
+                          <li><a href="<?php echo $arSiteSettings['hotel_link'];?>" target="_blank">Hotels</a></li>
+                        <?php
+                        }
+                        ?>
                         <li><a href="javascript:;">Trains<span class="menu-badge badge bg-danger">coming soon</span></a></li>
                       </ul>
                     </nav>

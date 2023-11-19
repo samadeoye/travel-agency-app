@@ -15,22 +15,22 @@ if ($rs)
     $trainReservations = str_replace('{site_name}', $arSiteSettings['name'], $rs['train_reservations']);
     $trainReservations = str_replace('{site_email}', $arSiteSettings['email'], $trainReservations);
     $safariReservations = str_replace('{site_name}', $arSiteSettings['name'], $rs['safari_reservations']);
-    $safariReservations = str_replace('{site_email}', $arSiteSettings['email'], $rs['safari_reservations']);
+    $safariReservations = str_replace('{site_email}', $arSiteSettings['email'], $safariReservations);
     $tourReservations = str_replace('{site_name}', $arSiteSettings['name'], $rs['tour_reservations']);
-    $tourReservations = str_replace('{site_email}', $arSiteSettings['email'], $rs['tour_reservations']);
+    $tourReservations = str_replace('{site_email}', $arSiteSettings['email'], $tourReservations);
 }
 
 require_once 'inc/head.php';
 ?>
 
 <!-- Page Header Start !-->
-<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/tour.jpg')">
+<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
                     <div class="page-heading">
-                        <h3 class="page-title"><?php echo $pageTitle;?></h3>
+                        <h3 class="page-title text-on-header"><?php echo $pageTitle;?></h3>
                     </div>
                 </div>
             </div>
@@ -56,21 +56,43 @@ require_once 'inc/head.php';
                 <div class="col-md-12 order-2 wow fadeInLeft" data-wow-delay=".4s">  
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#tab1Pane" type="button" role="tab" aria-controls="tab1Pane" aria-selected="true">Privacy Policy</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#tab2Pane" type="button" role="tab" aria-controls="tab2Pane" aria-selected="false">Taxi Bookings</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tab3" data-bs-toggle="tab" data-bs-target="#tab3Pane" type="button" role="tab" aria-controls="tab3Pane" aria-selected="false">Train Reservations</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tab4" data-bs-toggle="tab" data-bs-target="#tab4Pane" type="button" role="tab" aria-controls="tab4Pane" aria-selected="false">Safari Reservations</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="tab5" data-bs-toggle="tab" data-bs-target="#tab5Pane" type="button" role="tab" aria-controls="tab5Pane" aria-selected="false">Tour Reservations</button>
-                            </li>
+                            <?php
+                            if ($privacyPolicy != '')
+                            { ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#tab1Pane" type="button" role="tab" aria-controls="tab1Pane" aria-selected="true">Privacy Policy</button>
+                                </li>
+                            <?php
+                            }
+                            if ($taxiBookings != '')
+                            { ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#tab2Pane" type="button" role="tab" aria-controls="tab2Pane" aria-selected="false">Taxi Bookings</button>
+                                </li>
+                            <?php
+                            }
+                            if ($trainReservations != '')
+                            { ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab3" data-bs-toggle="tab" data-bs-target="#tab3Pane" type="button" role="tab" aria-controls="tab3Pane" aria-selected="false">Train Reservations</button>
+                                </li>
+                            <?php
+                            }
+                            if ($safariReservations != '')
+                            { ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab4" data-bs-toggle="tab" data-bs-target="#tab4Pane" type="button" role="tab" aria-controls="tab4Pane" aria-selected="false">Safari Reservations</button>
+                                </li>
+                            <?php
+                            }
+                            if ($tourReservations != '')
+                            { ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="tab5" data-bs-toggle="tab" data-bs-target="#tab5Pane" type="button" role="tab" aria-controls="tab5Pane" aria-selected="false">Tour Reservations</button>
+                                </li>
+                            <?php
+                            }
+                            ?>
                         </ul>
                     </div>
                     <div class="tab-content pt-3">

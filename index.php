@@ -2,45 +2,16 @@
 require_once 'inc/utils.php';
 use AbcTravels\Tour\Tour;
 use AbcTravels\Functions;
+use AbcTravels\ImageSlider\ImageSlider;
 $pageTitle = 'Home';
 require_once 'inc/head.php';
 ?>
 
-<!-- Banner Area Start !-->
-<div class="slider-area style-3">
-    <img class="shape-1 wow slideInLeft" src="images/shape/plus-element.png" alt="Shape">
-    <img class="shape-2 wow zoomInUp" src="images/shape/dots-black-2.png" alt="Shape">
-    <div class="banner-shape">
-        <img class="shape" src="images/shape/banner-shape-1.png" alt="">
-        <img class="bg-img" src="images/hero-section/bg-3.jpg" alt="Bg Image">
-    </div>
-    <div class="slider-wrapper">
-        <!-- single slider start -->
-        <div class="single-slider-wrapper">
-            <div class="single-slider" >
-                <div class="slider-overlay"></div>
-                <div class="container h-100 align-self-center">
-                    <div class="row h-100">
-                        <div class="col-lg-6 col-md-8 align-self-center">
-                            <div class="slider-content-wrapper">
-                                <div class="slider-content">
-                                    <span class="slider-short-title">Tour and Travels</span>
-                                    <h1 class="slider-title">Experience the ultimate luxury</h1>
-                                    <img class="bottom-shape" src="images/shape/bottom-bar.png" alt="Bottom Shape">
-                                    <div class="slider-btn-wrapper">
-                                        <a href="tours" class="theme-btn ">Get started</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- single slider end -->
-    </div>
-</div>
-<!-- Banner Area End !-->
+<!-- Slider Section Start !-->
+<?php
+echo AbcTravels\ImageSlider\ImageSlider::getSlidersContent();
+?>
+<!-- Slider Section End !-->
 
 <?php
 echo Functions::getToursSearchForm();
@@ -63,7 +34,7 @@ echo Functions::getToursSearchForm();
         <?php
             //TODO: Special packages are also listed here - confirm if to show.
             //Also, add content for Culinary tour or make as custom
-            $rs = Tour::getToursHomePage(['*'], 6);
+            $rs = Tour::getToursHomePage(['*'], 12);
             foreach($rs as $r)
             {
                 $img = !empty($r['img']) ? $r['img'] : 'boxed-bg.png';
@@ -105,6 +76,9 @@ echo Functions::getToursSearchForm();
                                     <div class="time-zone-inner">
                                         <i class="fa-solid fa-utensils"></i>
                                     </div>
+                                </div>
+                                <div class="btn-wrapper">
+                                    <a href="tour-details?package=<?php echo $r['short_name'];?>" class="theme-btn theme-btn-padding-2">More Information <i class="fa-solid fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>

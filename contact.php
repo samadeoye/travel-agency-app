@@ -5,13 +5,13 @@ require_once 'inc/head.php';
 ?>
 
 <!-- Page Header Start !-->
-<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/tour.jpg')">
+<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
                     <div class="page-heading">
-                        <h3 class="page-title"><?php echo $pageTitle;?></h3>
+                        <h3 class="page-title text-on-header"><?php echo $pageTitle;?></h3>
                     </div>
                 </div>
             </div>

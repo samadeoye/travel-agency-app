@@ -1,6 +1,9 @@
 <?php
 require_once '../../inc/utils.php';
 $pageTitle = 'Settings';
+$arAdditionalCSS[] = <<<EOQ
+<script src="https://cdn.tiny.cloud/1/8cw5r79obdojgicjwig1exg8q30t07nlinsebyju9p3odcrr/tinymce/6/tinymce.min.js"></script>
+EOQ;
 require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
 ?>
 
@@ -52,8 +55,20 @@ require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
                                 <input type="tel" id="sitePhone" name="sitePhone" class="form-control" value="<?php echo $arUser['sitePhone'];?>">
                             </div>
                             <div class="form-group">
+                                <label for="sitePhoneOthers">Other Phones</label>
+                                <textarea name="sitePhoneOthers" id="sitePhoneOthers" class="form-control siteTextarea" cols="30" rows="10"><?php echo $arUser['sitePhoneOthers'];?></textarea>
+                            </div>
+                            <div class="form-group">
                                 <label for="siteAddress">Address</label>
-                                <input type="text" id="siteAddress" name="siteAddress" class="form-control" value="<?php echo $arUser['siteAddress'];?>">
+                                <textarea name="siteAddress" id="siteAddress" class="form-control siteTextarea" cols="30" rows="10"><?php echo $arUser['siteAddress'];?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="licenseNumber">Tourist Board License No.</label>
+                                <input type="text" id="licenseNumber" name="licenseNumber" class="form-control" value="<?php echo $arUser['licenseNumber'];?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="hotelLink">Hotel URL</label>
+                                <input type="text" id="hotelLink" name="hotelLink" class="form-control" value="<?php echo $arUser['hotelLink'];?>">
                             </div>
                             <div class="form-group">
                                 <label for="siteFacebook">Facebook URL</label>
@@ -70,6 +85,10 @@ require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
                             <div class="form-group">
                                 <label for="siteLinkedin">LinkedIn URL</label>
                                 <input type="text" id="siteLinkedin" name="siteLinkedin" class="form-control" value="<?php echo $arUser['siteLinkedin'];?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="siteYoutube">YouTube URL</label>
+                                <input type="text" id="siteYoutube" name="siteYoutube" class="form-control" value="<?php echo $arUser['siteYoutube'];?>">
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Save Changes" class="btn btn-success float-right" id="btnSubmit">
@@ -89,21 +108,32 @@ require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
   
 <?php
 $arAdditionalJsOnLoad[] = <<<EOQ
+tinymce.init({
+    selector: '.siteTextarea',
+    branding: false,
+    plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+    tinycomments_mode: 'embedded',
+    tinycomments_author: 'Author name',
+    ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    height: "300"
+});
+
 $('#settingsForm #btnSubmit').click(function ()
 {
     var formId = '#settingsForm';
     var siteName = $(formId+' #siteName').val();
     var siteEmail = $(formId+' #siteEmail').val();
-    var bookingEmail = $(formId+' #bookingEmail').val();
     var sitePhone = $(formId+' #sitePhone').val();
     var siteAddress = $(formId+' #siteAddress').val();
 
-    if (siteName.length < 3 || siteName.length > 250 || siteEmail.length < 13 || bookingEmail.length < 13 || siteEmail.length > 150 || sitePhone.length < 6 || sitePhone.length > 16 || siteAddress.length < 10)
+    if (siteName.length < 3 || siteName.length > 250 || siteEmail.length < 13 || siteEmail.length > 150 || sitePhone.length < 6 || sitePhone.length > 16 || siteAddress.length < 10)
     {
         throwError('Please fill all required fields with valid details.');
     }
     else
     {
+        tinyMCE.triggerSave();
         var form = $("#settingsForm");
         $.ajax({
             url: 'inc/actions',

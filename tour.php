@@ -114,7 +114,7 @@ require_once 'inc/head.php';
 </div>
 
 <!-- Page Header Start !-->
-<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/tour.jpg')"></div>
+<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/bg.jpg')"></div>
 <!-- Page Header End !-->
 
 <?php

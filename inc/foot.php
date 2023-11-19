@@ -15,7 +15,9 @@
                             <p class="desc">Your number one travel destination management company</p>
                             <div class="footer-contact">
                                 <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
-                                <div class="contact-text"><span><?php echo $arSiteSettings['address'];?></span></div>
+                            </div>
+                            <div class="contact-text">
+                                <span><?php echo $arSiteSettings['address'];?></span>
                             </div>
                         </div>
                     </div>
@@ -28,6 +30,13 @@
                                 <li><a href="<?php echo DEF_ROOT_PATH;?>">Home</a></li>
                                 <li><a href="about">About</a></li>
                                 <li><a href="vehicles">Vehicles</a></li>
+                                <?php
+                                if ($arSiteSettings['hotel_link'] != '')
+                                { ?>
+                                <li><a href="<?php echo $arSiteSettings['hotel_link'];?>" target="_blank">Hotels</a></li>
+                                <?php
+                                }
+                                ?>
                                 <li><a href="terms">Terms & Conditions</a></li>
                                 <li><a href="javascript:;">Trains<span class="menu-badge badge bg-danger">coming soon</span></a></li>
                             </ul>
@@ -59,35 +68,74 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="footer-widget">
-                        <h2 class="footer-widget-title">Call</h2>
-                          <div class="footer-widget-contact">
-                              <div class="footer-contact">
+                        <!-- <h2 class="footer-widget-title">Call</h2> -->
+                        <div class="footer-widget-contact">
+                            <div class="footer-contact">
                                 <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
-                                <div class="contact-text"><a href="tel:<?php echo $arSiteSettings['phone'];?>"><?php echo $arSiteSettings['phone'];?></a></div>
                             </div>
-                          </div>
+                            <div class="contact-text">
+                                <a class="text-light" href="tel:<?php echo $arSiteSettings['phone'];?>"><?php echo $arSiteSettings['phone'];?></a>
+                            </div>
+                            <?php echo $arSiteSettings['phone_others'];?>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="footer-widget">
-                        <h2 class="footer-widget-title">Email</h2>
-                          <div class="footer-widget-contact">
-                              <div class="footer-contact">
+                        <!-- <h2 class="footer-widget-title">Email</h2> -->
+                        <div class="footer-widget-contact">
+                            <div class="footer-contact">
                                 <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
-                                <div class="contact-text"><a href="mailto:<?php echo $arSiteSettings['email'];?>"><?php echo $arSiteSettings['email'];?></a></div>
                             </div>
-                          </div>
+                            <div class="contact-text">
+                                <a class="text-light" href="mailto:<?php echo $arSiteSettings['email'];?>"><?php echo $arSiteSettings['email'];?></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 d-flex justify-content-lg-end align-items-lg-end">
-                    <div class="footer-widget">
-                        <h2 class="footer-widget-title">Follow us</h2>
-                        <div class="footer-widget-social">
-                            <div class="social-profile">
-                                <a href="<?php echo $arSiteSettings['facebook'];?>"><i class="fa-brands fa-facebook-f"></i></a>
-                                <a href="<?php echo $arSiteSettings['instagram'];?>"><i class="fa-brands fa-instagram"></i></a>
-                                <a href="<?php echo $arSiteSettings['twitter'];?>"><i class="fa-brands fa-twitter"></i></a>
-                                <a href="<?php echo $arSiteSettings['linkedin'];?>"><i class="fa-brands fa-linkedin-in"></i></a>
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <div class="footer-widget">
+                            <h2 class="footer-widget-title">Follow us</h2>
+                            <div class="footer-widget-social">
+                                <div class="social-profile">
+                                    <a href="<?php echo $arSiteSettings['facebook'];?>"><i class="fa-brands fa-facebook-f"></i></a>
+                                    <a href="<?php echo $arSiteSettings['instagram'];?>"><i class="fa-brands fa-instagram"></i></a>
+                                    <a href="<?php echo $arSiteSettings['twitter'];?>"><i class="fa-brands fa-twitter"></i></a>
+                                    <a href="<?php echo $arSiteSettings['linkedin'];?>"><i class="fa-brands fa-linkedin-in"></i></a>
+                                    <a href="<?php echo $arSiteSettings['youtube'];?>"><i class="fa-brands fa-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <?php
+                            if ($arSiteSettings['license_number'] != '')
+                            {?>
+                                <span class="mt-1 color-p font-size-15">Tourist Board License No: <?php echo $arSiteSettings['license_number'];?></span>
+                            <?php
+                            }
+                        ?>
+                    </div>
+                    <div class="d-flex">
+                        <div class="my-2">
+                            <span class="font-size-15">We Accept These International Payment Systems</span>
+                            <div>
+                                <img class="img-responsive" src="images/payment/apple-p-f.png" alt="Apple Pay">
+                                <img class="img-responsive" src="images/payment/google-p-f.png" alt="Google Pay">
+                                <img class="img-responsive" src="images/payment/pay-pal.png" alt="PayPal">
+                                <img class="img-responsive" src="images/payment/ali-pay.png" alt="Alipay">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="my-2">
+                            <span class="font-size-15">We Accept These Credit & Debit Cards</span>
+                            <div>
+                                <img class="img-responsive" src="images/payment/visa-card.png" alt="Visa">
+                                <img class="img-responsive" src="images/payment/master_card.png" alt="Mastercard">
+                                <img class="img-responsive" src="images/payment/american-express.png" alt="American Express">
+                                <img class="img-responsive" src="images/payment/union-pay-card.png" alt="Union Pay">
                             </div>
                         </div>
                     </div>

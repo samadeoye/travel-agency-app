@@ -6,6 +6,7 @@ use AbcTravels\Functions;
 $pageTitle = 'Tours';
 $id = $title = $destinationId = $destinationName = $mapIframe = '';
 $days = $price = $itenary = $inclusions = $summary = $shortName = '';
+$destinationShortName = '';
 $package = isset($_GET['package']) ? trim($_GET['package']) : '';
 $redirect = true;
 if ($package != '')
@@ -35,8 +36,9 @@ if ($package != '')
             $itenary = Tour::getItenaryDisplay($arFields);
         }
         $destinationId = $rs['destination_id'];
-        $rsx = Destination::getDestination($destinationId, ['name']);
+        $rsx = Destination::getDestination($destinationId, ['name', 'short_name']);
         $destinationName = stringToTitle($rsx['name']);
+        $destinationShortName = $rsx['short_name'];
         if (strlen($id) == 36)
         {
             $redirect = false;
@@ -51,14 +53,14 @@ require_once 'inc/head.php';
 ?>
 
 <!-- Page Header Start !-->
-<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/tour.jpg')"></div>
+<div class="page-breadcrumb-area page-bg" style="background-image: url('images/breadcrumb/bg.jpg')"></div>
 <!-- Page Header End !-->
 <div class="container pt-4 pb-4">
     <div class="row">
         <div class="col-md-12 font-size-15">
             <a href="<?php echo DEF_ROOT_PATH;?>"><i class="fa-solid fa-house"></i> Home</a>
             <a href="tours"> <i class="fa-solid fa-angle-right"></i> Tours</a>
-            <a href="tour?package=<?php echo $shortName;?>"> <i class="fa-solid fa-angle-right"></i> <?php echo $destinationName;?></a>
+            <a href="tour?package=<?php echo $destinationShortName;?>"> <i class="fa-solid fa-angle-right"></i> <?php echo $destinationName;?></a>
             <a class="active"> <i class="fa-solid fa-angle-right"></i> <?php echo $title;?></a>
         </div>
     </div>
@@ -332,7 +334,6 @@ setTimeout(function() {
 setInterval(function() {
     showNotification();
 }, 25000);
-
 $("#enquireNowBtn").click(function(){
     $('#enquireNowModal').modal('show');
     getRecaptcha();

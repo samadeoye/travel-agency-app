@@ -7,6 +7,8 @@ use AbcTravels\Admin\Destination\Destination;
 use AbcTravels\Admin\Tour\Tour;
 use AbcTravels\Submission\Submission;
 use AbcTravels\Vehicle\Vehicle;
+use AbcTravels\Analytics;
+use AbcTravels\ImageSlider\ImageSlider;
 
 $action = isset($_REQUEST['action']) ? trim($_REQUEST['action']) : '';
 if ($action == '')
@@ -133,6 +135,43 @@ try
 
         case 'updateterms':
             AbcTravels\Terms\Terms::updateTerms();
+        break;
+        
+        case 'getanalytics':
+            Analytics::getAnalyticsList();
+            $rs = Analytics::$data;
+            if (count($rs) > 0)
+            {
+                $data = $rs;
+            }
+        break;
+
+        case 'getanalyticschartdata':
+            Analytics::getAnalyticsChartData();
+            $rs = Analytics::$data;
+            if (count($rs) > 0)
+            {
+                $data = $rs;
+            }
+        break;
+
+        case 'getsliders':
+            ImageSlider::getSlidersList();
+            $rs = ImageSlider::$data;
+            if (count($rs) > 0)
+            {
+                $data = $rs;
+            }
+        break;
+
+        case 'addslider':
+        case 'updateslider':
+            ImageSlider::addOrUpdateSlider();
+            $extraData = ImageSlider::$data;
+        break;
+
+        case 'deleteslider':
+            ImageSlider::deleteSlider();
         break;
     }
 

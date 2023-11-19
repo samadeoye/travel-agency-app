@@ -192,17 +192,35 @@ class Param
                         'label' => 'Site Email',
                         'required' => true
                     ],
+                    'bookingEmail' => [
+                        'method' => 'post',
+                        'length' => [13,150],
+                        'label' => 'Booking Email',
+                        'required' => false
+                    ],
                     'sitePhone' => [
                         'method' => 'post',
                         'length' => [8,17],
                         'label' => 'Site Phone',
                         'required' => true
                     ],
+                    'sitePhoneOthers' => [
+                        'method' => 'post',
+                        'length' => [0,0],
+                        'label' => 'Other Site Phone',
+                        'required' => false
+                    ],
                     'siteAddress' => [
                         'method' => 'post',
                         'length' => [10,0],
                         'label' => 'Site Address',
                         'required' => true
+                    ],
+                    'licenseNumber' => [
+                        'method' => 'post',
+                        'length' => [0,250],
+                        'label' => 'Tourist Board License No.',
+                        'required' => false
                     ]
                 ];
             break;
@@ -238,6 +256,12 @@ class Param
                         'method' => 'post',
                         'length' => [1,1],
                         'label' => 'Is Special Package',
+                        'required' => false
+                    ],
+                    'addNotification' => [
+                        'method' => 'post',
+                        'length' => [1,1],
+                        'label' => 'Add Notification',
                         'required' => false
                     ],
                     'mapIframe' => [
@@ -284,6 +308,12 @@ class Param
                         'length' => [1,250],
                         'label' => 'No. of Passengers',
                         'required' => true
+                    ],
+                    'otherDetails' => [
+                        'method' => 'post',
+                        'length' => [0,0],
+                        'label' => 'Other Details',
+                        'required' => false
                     ]
                 ];
             break;

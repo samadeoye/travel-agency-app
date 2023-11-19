@@ -4,7 +4,7 @@ use AbcTravels\Vehicle\Vehicle;
 
 $action = trim($_REQUEST['action']);
 
-$name = $id = $passengers = $img = '';
+$name = $id = $passengers = $img = $otherDetails = '';
 $title = 'Add New Vehicle';
 $modalId = 'defaultModal';
 if($action == 'updatevehicle')
@@ -12,12 +12,13 @@ if($action == 'updatevehicle')
     $title = 'Update Vehicle';
 
     $id = trim($_REQUEST['id']);
-    $rs = Vehicle::getVehicle($id, ['name', 'passengers', 'img']);
+    $rs = Vehicle::getVehicle($id, ['name', 'passengers', 'img', 'other_details']);
     if ($rs)
     {
         $name = $rs['name'];
         $passengers = $rs['passengers'];
         $img = $rs['img'];
+        $otherDetails = $rs['other_details'];
     }
     else
     {
@@ -63,6 +64,12 @@ if($action == 'updatevehicle')
                 <input type="file" class="form-control" name="featuredImg" id="featuredImg">
             </div>
         </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label for="otherDetails">Other Details</label>
+                <textarea name="otherDetails" id="otherDetails" class="form-control wysiwygTextarea" cols="30" rows="10"><?php echo $otherDetails;?></textarea>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -74,6 +81,7 @@ if($action == 'updatevehicle')
 var formId = 'addUpdateVehicleForm';
 var modalId = '<?php echo $modalId; ?>';
 $(document).ready(function() {
+    applyMCE();
 
     $('#'+formId+' #btnSubmit').click(function(){
         var name = $('#'+formId+' #name').val();
@@ -91,6 +99,7 @@ $(document).ready(function() {
         }
         else
         {
+            tinyMCE.triggerSave();
             var formData = new FormData(this.form);
             $.ajax({
                 url: 'inc/actions',
@@ -108,6 +117,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if(data.status == true) {
                         throwSuccess(data.msg);
+                        tinymce.remove("#otherDetails");
                         closeModal(modalId, true);
                         reloadTable('vehiclesTable');
                     }

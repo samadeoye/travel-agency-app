@@ -4,6 +4,7 @@ $pageTitle = 'Vehicles';
 $arAdditionalCSS[] = <<<EOQ
 <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<script src="https://cdn.tiny.cloud/1/8cw5r79obdojgicjwig1exg8q30t07nlinsebyju9p3odcrr/tinymce/6/tinymce.min.js"></script>
 EOQ;
 require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
 ?>
@@ -124,9 +125,38 @@ function deleteVehicle(id)
     });
 }
 
+function applyMCE()
+{
+    tinymce.init({
+        selector: '#otherDetails',
+        branding: false,
+        plugins: 'anchor autolink charmap codesample emoticons link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+          { value: 'First.Name', title: 'First Name' },
+          { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        height: "250"
+    });
+}
+
 EOQ;
 
 $arAdditionalJsOnLoad[] = <<<EOQ
+$(document).on('focusin', function(e) {
+    if ($(e.target).closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length)
+    {
+        e.stopImmediatePropagation();
+    }
+});
+
+$('#defaultModal').on('hide.bs.modal', function () {
+    tinymce.remove("#otherDetails");
+});
+
 var vehiclesTable = $('#vehiclesTable').DataTable({
     processing: true,
     autoWidth: false,
