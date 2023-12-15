@@ -141,9 +141,21 @@ $arCurrentPage = getCurrentPageAdmin($pageTitle);
             </a>
           </li>
           <li class="nav-item py-2">
+            <a href="app/subscriptions" class="nav-link <?php echo $arCurrentPage['subscriptions'];?>">
+              <i class="nav-icon fas fa-envelope"></i>
+              <p>Subscriptions</p>
+            </a>
+          </li>
+          <li class="nav-item py-2">
             <a href="app/vehicles" class="nav-link <?php echo $arCurrentPage['vehicles'];?>">
               <i class="nav-icon fas fa-car"></i>
               <p>Vehicles</p>
+            </a>
+          </li>
+          <li class="nav-item py-2">
+            <a href="app/hotels" class="nav-link <?php echo $arCurrentPage['hotels'];?>">
+              <i class="nav-icon fas fa-hotel"></i>
+              <p>Hotels</p>
             </a>
           </li>
           <li class="nav-item py-2">

@@ -66,10 +66,17 @@ class Submission
             'message' => $message
         ];
 
-        $typeId = DEF_SUBMISSION_TYPE_COMMON_ENQUIRY;
-        if ($action == 'addTourEnquiry')
+        switch($action)
         {
-            $typeId = DEF_SUBMISSION_TYPE_TOUR_ENQUIRY;
+            case 'addTourEnquiry':
+                $typeId = DEF_SUBMISSION_TYPE_TOUR_ENQUIRY;
+            break;
+            case 'addHotelEnquiry':
+                $typeId = DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY;
+            break;
+            default:
+                $typeId = DEF_SUBMISSION_TYPE_COMMON_ENQUIRY;
+            break;
         }
         $data = [
             'type_id' => $typeId,
@@ -302,7 +309,7 @@ class Submission
         {
             $arFilter['limit'] = '0, 10';
         }
-        $fields = is_array($arFields) ? implode(',', $arFields) : $arFields;
+        
         return Crud::select(
             self::$table,
             $arFilter
@@ -371,6 +378,7 @@ EOQ;*/
             [
                 DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
                 , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
+                , DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY
                 , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
                 , DEF_SUBMISSION_TYPE_CONTACT
             ]
@@ -384,6 +392,7 @@ EOQ;
             if (in_array($typeId, [
                 DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
                 , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
+                , DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY
                 , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
             ]))
             {
@@ -417,6 +426,7 @@ EOQ;
                 if (in_array($typeId, [
                         DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
                         , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
+                        , DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY
                         , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
                     ]
                 ))

@@ -396,8 +396,10 @@ function getCurrentPageAdmin($pageTitle)
     'alltours' => '',
     'submissions' => '',
     'submission' => '',
+    'subscriptions' => '',
     'analytics' => '',
     'vehicles' => '',
+    'hotels' => '',
     'termsandconditions' => '',
     'homepagesliders' => '',
     'profile' => '',
@@ -432,8 +434,14 @@ function getCurrentPageAdmin($pageTitle)
     case 'submission':
       $arCurrentPage['submissions'] = $lblActive;
     break;
+    case 'subscriptions':
+      $arCurrentPage['subscriptions'] = $lblActive;
+    break;
     case 'vehicles':
       $arCurrentPage['vehicles'] = $lblActive;
+    break;
+    case 'hotels':
+      $arCurrentPage['hotels'] = $lblActive;
     break;
     case 'termsandconditions':
       $arCurrentPage['termsandconditions'] = $lblActive;
@@ -466,6 +474,7 @@ function getCurrentPage($pageTitle)
     'contact' => '',
     'tours' => '',
     'vehicles' => '',
+    'hotels' => '',
     'terms' => ''
   ];
   $lblActive = 'active';
@@ -486,6 +495,9 @@ function getCurrentPage($pageTitle)
     break;
     case 'vehicles':
       $arCurrentPage['vehicles'] = $lblActive;
+    break;
+    case 'hotels':
+      $arCurrentPage['hotels'] = $lblActive;
     break;
     case 'termsandconditions':
       $arCurrentPage['terms'] = $lblActive;
@@ -544,6 +556,9 @@ function getSubmissionType($typeId)
     break;
     case DEF_SUBMISSION_TYPE_CONTACT:
       $title = 'Contact Form';
+    break;
+    case DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY:
+      $title = 'Hotel Enquiry';
     break;
   }
 

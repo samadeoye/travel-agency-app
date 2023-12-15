@@ -73,6 +73,30 @@ AbcTravels\Analytics::logUserAnalytics();
     </div>
   </div>
 
+  <!-- Subscription Modal -->
+  <div class="modal fade" id="subscriptionModal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="subscriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Subscribe<br><span style="font-size:15px;font-weight:normal;">Be the first to know about our sweet offers!</span></h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="subcriptionModalForm" onsubmit="return false;">
+            <input type="email" class="form-control" id="subcriptionModalEmail" name="subcriptionModalEmail" placeholder="Your email">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitSubscriptionModalForm('modal')">Subscribe</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Header Start !-->
   <header class="header-area">
     <!-- Header Top Start -->
@@ -133,12 +157,15 @@ AbcTravels\Analytics::logUserAnalytics();
                         <li class="<?php echo $arCurrentPage['tours'];?>"><a href="tours">Tours</a></li>
                         <li class="<?php echo $arCurrentPage['contact'];?>"><a href="contact">Contact</a></li>
                         <li class="<?php echo $arCurrentPage['vehicles'];?>"><a href="vehicles">Vehicles</a></li>
+                        <li class="<?php echo $arCurrentPage['hotels'];?>"><a href="hotels">Hotels</a></li>
                         <?php
+                        /*
                         if ($arSiteSettings['hotel_link'] != '')
                         { ?>
                           <li><a href="<?php echo $arSiteSettings['hotel_link'];?>" target="_blank">Hotels</a></li>
                         <?php
                         }
+                        */
                         ?>
                         <li><a href="javascript:;">Trains<span class="menu-badge badge bg-danger">coming soon</span></a></li>
                       </ul>

@@ -6,6 +6,7 @@ use AbcTravels\Destination\Destination;
 use AbcTravels\Tour\Tour;
 use AbcTravels\Submission\Submission;
 use AbcTravels\Vehicle\Vehicle;
+use AbcTravels\Hotel\Hotel;
 
 $action = isset($_REQUEST['action']) ? trim($_REQUEST['action']) : '';
 if ($action == '')
@@ -52,6 +53,7 @@ try
 
         case 'addCommonEnquiry':
         case 'addTourEnquiry':
+        case 'addHotelEnquiry':
             Submission::addEnquiry();
         break;
 
@@ -70,6 +72,19 @@ try
             {
                 $data = $rs;
             }
+        break;
+
+        case 'getRoomsPaginationData':
+            Hotel::getAppRoomsPaginationData();
+            $rs = Hotel::$data;
+            if (count($rs) > 0)
+            {
+                $data = $rs;
+            }
+        break;
+
+        case 'subscribe':
+            AbcTravels\Subscription\Subscription::addSubscription();
         break;
     }
 

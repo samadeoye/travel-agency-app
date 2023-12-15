@@ -30,12 +30,15 @@
                                 <li><a href="<?php echo DEF_ROOT_PATH;?>">Home</a></li>
                                 <li><a href="about">About</a></li>
                                 <li><a href="vehicles">Vehicles</a></li>
+                                <li><a href="hotels">Hotels</a></li>
                                 <?php
+                                /*
                                 if ($arSiteSettings['hotel_link'] != '')
                                 { ?>
                                 <li><a href="<?php echo $arSiteSettings['hotel_link'];?>" target="_blank">Hotels</a></li>
                                 <?php
                                 }
+                                */
                                 ?>
                                 <li><a href="terms">Terms & Conditions</a></li>
                                 <li><a href="javascript:;">Trains<span class="menu-badge badge bg-danger">coming soon</span></a></li>
@@ -60,6 +63,17 @@
                             <ul class="menu">
                                 <li><a href="tours">Tours</a></li>
                             </ul>
+                        </div>
+                    </div>
+                    <div class="footer-widget-menu-wrapper mt-4">
+                        <div class="footer-widget widget_nav_menu">
+                            <h2 class="text-white font-size-15">Subcribe</h2>
+                            <small>Be the first not know about our sweet offers</small>
+                            <div class="menu">
+                                <form id="subscriptionForm" onsubmit="return false;">
+                                    <input type="email" class="form-control" id="subscriptionEmail" name="subscriptionEmail" placeholder="Your email">
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,6 +217,146 @@ if (count($arAdditionalJs) > 0)
   echo implode(PHP_EOL, $arAdditionalJs);
 }
 ?>
+
+var subscriptionPopupSet = localStorage.getItem('subscriptionPopupSet') ? localStorage.getItem('subscriptionPopupSet') : '';
+
+if (subscriptionPopupSet != 'true'){
+    invokeSubscriptionPopup();
+    localStorage.setItem('subscriptionPopupSet', 'true');
+}
+
+function invokeSubscriptionPopup()
+{
+    setTimeout(function() {
+        $("#subscriptionModal").modal('show');
+    }, 5000);
+}
+
+function submitSubscriptionModalForm(typeId)
+{
+    if (typeId == undefined)
+    {
+        typeId = '';
+    }
+    var formId = '#subscriptionForm';
+    var formEmailField = 'subscriptionEmail';
+    if (typeId == 'modal')
+    {
+        formId = '#subcriptionModalForm';
+        formEmailField = 'subcriptionModalEmail';
+    }
+    var subscriptionEmail = $(formId+' #'+formEmailField).val();
+
+    if (subscriptionEmail.length < 13 || subscriptionEmail.length > 100)
+    {
+        throwError('Please enter a valid email address', 'toast-top-right');
+    }
+    else
+    {
+        var form = $(formId);
+        $.ajax({
+            url: 'inc/actions',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                email: subscriptionEmail,
+                action: 'subscribe'
+            },
+            success: function(data)
+            {
+                if (data.status == true)
+                {
+                    throwSuccess('Email saved successfully!', 'toast-top-right');
+                    form[0].reset();
+                    if (typeId == 'modal')
+                    {
+                        $("#subscriptionModal").modal('hide');
+                    }
+                }
+                else
+                {
+                    if (data.info !== undefined)
+                    {
+                        throwInfo(data.msg, 'toast-top-right');
+                    }
+                    else
+                    {
+                        throwError(data.msg, 'toast-top-right');
+                    }
+                }
+            }
+        });
+    }
+}
+
+var tourEnquiryFormWidgetId = 0;
+function getRecaptcha()
+{
+    if (tourEnquiryFormWidgetId == 0)
+    {
+        tourEnquiryFormWidgetId = grecaptcha.render(
+            'tourFormRecaptcha'
+            , {"sitekey": gSiteKey}
+        );
+    }
+}
+function openEnquireNowModal()
+{
+    $('#enquireNowModal').modal('show');
+    getRecaptcha();
+}
+function invokeTourEnquiryFormProcess()
+{
+    var formId = '#tourEnquiryForm';
+    var name = $(formId+' #name').val();
+    var email = $(formId+' #email').val();
+    var mobile = $(formId+' #mobile').val();
+    var nationality = $(formId+' #nationality').val();
+    var destination = $(formId+' #destination').val();
+    var numAdult = $(formId+' #numAdult').val();
+
+    if (name.length < 3 || email.length < 13 || mobile.length < 6 || nationality.length < 3 || destination.length < 3 || numAdult.length < 1)
+    {
+        throwError('Please fill all required fields with valid details.', 'toast-top-right');
+    }
+    else
+    {
+        var form = $("#tourEnquiryForm");
+        $.ajax({
+            url: 'inc/actions',
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            beforeSend: function() {
+                enableDisableBtn(formId+' #btnSubmit', 0);
+            },
+            complete: function() {
+                enableDisableBtn(formId+' #btnSubmit', 1);
+            },
+            success: function(data)
+            {
+                if (data.status == true)
+                {
+                    throwSuccess('Message sent successfully!', 'toast-top-right');
+                    form[0].reset();
+                    grecaptcha.reset(tourEnquiryFormWidgetId);
+                    closeModal('enquireNowModal', false);
+                }
+                else
+                {
+                    if(data.info !== undefined)
+                    {
+                        throwInfo(data.msg, 'toast-top-right');
+                    }
+                    else
+                    {
+                        throwError(data.msg, 'toast-top-right');
+                    }
+                }
+            }
+        });
+    }
+}
 </script>
 
 <script>
@@ -213,6 +367,10 @@ $(document).ready(function() {
         echo implode(PHP_EOL, $arAdditionalJsOnLoad);
     }
     ?>
+
+    $("#subscriptionModal").on("hide.bs.modal", function() {
+        $("#subscriptionModal #subcriptionModalEmail").val('');
+    });
 
     $("#commonEnquiryForm #btnSubmit").click(function(){
         var formId = '#commonEnquiryForm';
@@ -262,6 +420,14 @@ $(document).ready(function() {
                     }
                 }
             });
+        }
+    });
+
+    $("#subscriptionForm").unbind('keypress').bind('keypress', function (e) {
+        var subscriptionkeyCode = (event.keyCode ? event.keyCode : event.which);
+        if (subscriptionkeyCode === 13)
+        {
+            submitSubscriptionModalForm();
         }
     });
     

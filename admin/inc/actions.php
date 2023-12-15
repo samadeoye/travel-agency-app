@@ -9,6 +9,8 @@ use AbcTravels\Submission\Submission;
 use AbcTravels\Vehicle\Vehicle;
 use AbcTravels\Analytics;
 use AbcTravels\ImageSlider\ImageSlider;
+use AbcTravels\Subscription\Subscription;
+use AbcTravels\Hotel\Hotel;
 
 $action = isset($_REQUEST['action']) ? trim($_REQUEST['action']) : '';
 if ($action == '')
@@ -115,6 +117,25 @@ try
             Vehicle::deleteVehicle();
         break;
 
+        case 'gethotelrooms':
+            Hotel::getHotelRoomsList();
+            $rs = Hotel::$data;
+            if (count($rs) > 0)
+            {
+                $data = $rs;
+            }
+        break;
+
+        case 'addhotelroom':
+        case 'updatehotelroom':
+            Hotel::addOrUpdateHotelRoom();
+            $extraData = Hotel::$data;
+        break;
+
+        case 'deletehotelroom':
+            Hotel::deleteHotelRoom();
+        break;
+
         case 'updatesettings':
             AbcTravels\Settings\Settings::updateSettings();
         break;
@@ -131,6 +152,19 @@ try
 
         case 'deletesubmission':
             Submission::deleteSubmission();
+        break;
+        
+        case 'getsubscriptions':
+            Subscription::getSubscriptionsList();
+            $rs = Subscription::$data;
+            if (count($rs) > 0)
+            {
+                $data = $rs;
+            }
+        break;
+
+        case 'deletesubscription':
+            Subscription::deleteSubscription();
         break;
 
         case 'updateterms':

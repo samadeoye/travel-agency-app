@@ -126,7 +126,7 @@ require_once 'inc/head.php';
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                    <a href="javascript:;" class="enq-btn" id="enquireNowBtn">Enquire Now</a>
+                    <a href="javascript:;" onclick="openEnquireNowModal()" class="enq-btn">Enquire Now</a>
                 </div>
                 <div class="post-card-divider"></div>
                 <div class="sidebar">
@@ -163,155 +163,13 @@ require_once 'inc/head.php';
 <!-- Tour Details Area Start -->
 
 <!-- Enquire Now Modal -->
-<div class="modal fade" id="enquireNowModal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="enquireNowModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Enquire Now</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form class="row g-3" id="tourEnquiryForm" onsubmit="return false;">
-                <input type="hidden" name="action" value="addTourEnquiry">
-                <div class="col-md-6">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="name" class="form-control" id="name" name="name">
-                </div>
-                <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email">
-                </div>
-                <div class="col-md-6">
-                    <label for="mobile" class="form-label">Mobile</label>
-                    <input type="tel" class="form-control" id="mobile" name="mobile">
-                </div>
-                <div class="col-md-6">
-                    <label for="nationality" class="form-label">Nationality</label>
-                    <select id="nationality" name="nationality" class="form-select">
-                    <?php
-                        echo AbcTravels\Functions::getCountriesDropdownOptions();
-                    ?>
-                    </select>
-                </div>
-                <?php
-                    $minDate = date('Y-m-d', strtotime('+1 days', strtotime(date('Y-m-d'))));
-                ?>
-                <div class="col-md-6">
-                    <label for="arrival-date" class="form-label">Arrival Date</label>
-                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate" min="<?php echo $minDate;?>">
-                </div>
-                <div class="col-md-6">
-                    <label for="departure-date" class="form-label">Departure Date</label>
-                    <input type="date" class="form-control" id="departureDate" name="departureDate" min="<?php echo $minDate;?>">
-                </div>
-                <div class="col-md-12">
-                    <label for="destination" class="form-label">Destination</label>
-                    <select id="destination" name="destination" class="form-select">
-                        <?php
-                            echo AbcTravels\Destination\Destination::getDestinationsDropdownOptions();
-                        ?>
-                    </select>
-                </div>
-                <label for="travellers" class="form-label">No. of Travellers</label>
-                <div class="col-md-6">
-                    <input type="number" class="form-control" id="numAdult" name="numAdult" placeholder="Adult">
-                </div>
-                <div class="col-md-6">
-                    <input type="number" class="form-control" id="numChildren" name="numChildren" placeholder="Children">
-                </div>
-                <div class="col-md-12">
-                    <label for="childrenAges" class="form-label">Children Ages (separate with commas)</label>
-                    <input type="text" class="form-control" id="childrenAges" name="childrenAges" placeholder="e.g 7, 10, 13">
-                </div>
-                <div class="col-md-12">
-                    <label for="destination" class="form-label">Message</label>
-                    <textarea class="form-control" name="message" id="message" cols="30" rows="4"></textarea>
-                </div>
-                <div class="col-md-12">
-                    <div class="googleRecaptcha" id="tourFormRecaptcha"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="col-12">
-                    <button type="button" class="theme-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="theme-btn" onclick="invokeTourEnquiryFormProcess()">Submit</button>
-                </div>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
+<?php
+    echo AbcTravels\Functions::getEnquireNowModal();
+?>
 
 <?php
 $arAdditionalJs[] = <<<EOQ
 var arnNumOfPeople = [1,2,3];
-var tourEnquiryFormWidgetId = 0;
-function invokeTourEnquiryFormProcess()
-{
-    var formId = '#tourEnquiryForm';
-    var name = $(formId+' #name').val();
-    var email = $(formId+' #email').val();
-    var mobile = $(formId+' #mobile').val();
-    var nationality = $(formId+' #nationality').val();
-    var destination = $(formId+' #destination').val();
-    var numAdult = $(formId+' #numAdult').val();
-
-    if (name.length < 3 || email.length < 13 || mobile.length < 6 || nationality.length < 3 || destination.length < 3 || numAdult.length < 1)
-    {
-        throwError('Please fill all required fields with valid details.', 'toast-top-right');
-    }
-    else
-    {
-        var form = $("#tourEnquiryForm");
-        $.ajax({
-            url: 'inc/actions',
-            type: 'POST',
-            dataType: 'json',
-            data: form.serialize(),
-            beforeSend: function() {
-                enableDisableBtn(formId+' #btnSubmit', 0);
-            },
-            complete: function() {
-                enableDisableBtn(formId+' #btnSubmit', 1);
-            },
-            success: function(data)
-            {
-                if(data.status == true)
-                {
-                    throwSuccess('Message sent successfully!', 'toast-top-right');
-                    form[0].reset();
-                    grecaptcha.reset(tourEnquiryFormWidgetId);
-                    closeModal('enquireNowModal', false);
-                }
-                else
-                {
-                    if(data.info !== undefined)
-                    {
-                        throwInfo(data.msg, 'toast-top-right');
-                    }
-                    else
-                    {
-                        throwError(data.msg, 'toast-top-right');
-                    }
-                }
-            }
-        });
-    }
-}
-
-function getRecaptcha()
-{
-    if (tourEnquiryFormWidgetId == 0)
-    {
-        tourEnquiryFormWidgetId = grecaptcha.render(
-            'tourFormRecaptcha'
-            , {"sitekey": gSiteKey}
-        );
-    }
-}
-
 function showNotification()
 {
     var lblPeople = 'people';
@@ -334,10 +192,6 @@ setTimeout(function() {
 setInterval(function() {
     showNotification();
 }, 25000);
-$("#enquireNowBtn").click(function(){
-    $('#enquireNowModal').modal('show');
-    getRecaptcha();
-});
 
 setTimeout(function() {
     commonEnquiryFormWidgetId = grecaptcha.render(
