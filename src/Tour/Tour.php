@@ -96,6 +96,25 @@ class Tour
         );
     }
 
+    public static function getTourNumberOfViewDisplay()
+    {
+        $lblPeople = 'people';
+        $lblIsAre = 'are';
+        $arnNumOfPeople = [1,2,3];
+        $randomKey = array_rand($arnNumOfPeople, 1);
+        $numOfPeople = $arnNumOfPeople[$randomKey];
+        if ($numOfPeople == 1)
+        {
+            $lblPeople = 'person';
+            $lblIsAre = 'is';
+        }
+        $msg = "$numOfPeople $lblPeople $lblIsAre checking this tour";
+        return <<<EOQ
+        <span class='badge bg-info'><i class='fas fa-eye'></i> $msg</span>
+EOQ;
+
+    }
+
     public static function getToursContent($destinationId, $page=1, $tourDuration=0)
     {
         $rs = self::getTours($destinationId, $page, ['*'], $tourDuration);
@@ -103,7 +122,7 @@ class Tour
         {
             return 'No tour found';
         }
-        $arnNumOfPeople = [1,2,3];
+        
         $output = '';
         foreach($rs as $r)
         {
@@ -116,19 +135,7 @@ class Tour
             $notification = '';
             if (doTypeCastInt($r['add_notification']))
             {
-                $lblPeople = 'people';
-                $lblIsAre = 'are';
-                $randomKey = array_rand($arnNumOfPeople,1);
-                $numOfPeople = $arnNumOfPeople[$randomKey];
-                if ($numOfPeople == 1)
-                {
-                    $lblPeople = 'person';
-                    $lblIsAre = 'is';
-                }
-                $msg = "$numOfPeople $lblPeople $lblIsAre checking this tour";
-                $notification = <<<EOQ
-                <span class='badge bg-info'><i class='fas fa-eye'></i> $msg</span>
-EOQ;
+                $notification = self::getTourNumberOfViewDisplay();
             }
             $output .= <<<EOQ
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">

@@ -206,7 +206,7 @@ echo Functions::getToursSearchForm();
         <div class="col-md-6 mx-auto enquire-now-form">
         <h6 class="title">Enquire Now</h6>
         <?php
-            echo Functions::getCommonEnquiryForm();
+            echo Functions::getCommonEnquiryForm($destinationId, 1);
         ?>
         </div>
     </div>

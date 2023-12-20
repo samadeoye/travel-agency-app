@@ -67,8 +67,8 @@
                     </div>
                     <div class="footer-widget-menu-wrapper mt-4">
                         <div class="footer-widget widget_nav_menu">
-                            <h2 class="text-white font-size-15">Subcribe</h2>
-                            <small>Be the first not know about our sweet offers</small>
+                            <h2 class="text-white font-size-15">Subscribe</h2>
+                            <small><?php echo $arSiteSettings['subscription_text'] ;?></small>
                             <div class="menu">
                                 <form id="subscriptionForm" onsubmit="return false;">
                                     <input type="email" class="form-control" id="subscriptionEmail" name="subscriptionEmail" placeholder="Your email">
@@ -218,18 +218,19 @@ if (count($arAdditionalJs) > 0)
 }
 ?>
 
-var subscriptionPopupSet = localStorage.getItem('subscriptionPopupSet') ? localStorage.getItem('subscriptionPopupSet') : '';
+var subscriptionPopupSet = sessionStorage.getItem('subscriptionPopupSet') ? sessionStorage.getItem('subscriptionPopupSet') : '';
 
 if (subscriptionPopupSet != 'true'){
     invokeSubscriptionPopup();
-    localStorage.setItem('subscriptionPopupSet', 'true');
+    sessionStorage.setItem('subscriptionPopupSet', 'true');
 }
 
 function invokeSubscriptionPopup()
 {
     setTimeout(function() {
         $("#subscriptionModal").modal('show');
-    }, 5000);
+    }
+    , 5000);
 }
 
 function submitSubscriptionModalForm(typeId)

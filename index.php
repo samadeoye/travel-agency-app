@@ -40,6 +40,11 @@ echo Functions::getToursSearchForm();
                 $img = !empty($r['img']) ? $r['img'] : 'boxed-bg.png';
                 $imgPath = 'images/tour/'.$img;
                 $title = stringToTitle($r['title']);
+                $notification = '';
+                if (doTypeCastInt($r['add_notification']))
+                {
+                    $notification = Tour::getTourNumberOfViewDisplay();
+                }
                 ?>
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
                     <div class="location-card style-2">
@@ -59,6 +64,7 @@ echo Functions::getToursSearchForm();
                         </div>
                         <div class="content-wrapper">
                             <div class="content-inner">
+                                <?php echo $notification; ?>
                                 <span class="font-size-15 text-secondary">From</span>
                                 <h5 class="price" style="padding-bottom:0px;">$<?php echo doNumberFormat($r['price']);?> <span class="font-size-15 text-secondary">Per person</span></h5>
                                 <span class="content-title"><a href="tour-details?package=<?php echo $r['short_name'];?>" class="font-size-20"><?php echo $title;?></a></span>

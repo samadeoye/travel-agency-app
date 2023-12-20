@@ -6694,8 +6694,8 @@ body.admin-bar .header-menu-area.sticky_menu {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  margin: 0 103px;
-  border-radius: 32px;
+  /* margin: 0 103px;
+  border-radius: 32px; */
   overflow: hidden;
 }
 @media (max-width: 1600px) {
@@ -11420,7 +11420,7 @@ ul.children {
 {
   font-size: 15px !important;
 }
-.font-size-17
+.font-size-17s
 {
   font-size: 17px !important;
 }

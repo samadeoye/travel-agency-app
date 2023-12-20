@@ -133,7 +133,7 @@ require_once 'inc/head.php';
                     <div class="widget widget_booking_form">
                         <h6 class="title">Book Now</h6>
                         <?php
-                            echo Functions::getCommonEnquiryForm();
+                            echo Functions::getCommonEnquiryForm($id);
                         ?>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ require_once 'inc/head.php';
 
 <!-- Enquire Now Modal -->
 <?php
-    echo AbcTravels\Functions::getEnquireNowModal();
+    echo AbcTravels\Functions::getEnquireNowModal('addTourEnquiry', $id);
 ?>
 
 <?php

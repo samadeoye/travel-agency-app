@@ -72,6 +72,10 @@ require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
                                     <?php echo AbcTravels\Functions::getYesOrNoDropdown($arUser['setSubscriptionPopup']); ?>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="subscriptionPopupText">Subscription Popup Text</label>
+                                <input type="text" id="subscriptionPopupText" name="subscriptionPopupText" class="form-control" value="<?php echo $arUser['subscriptionText'];?>">
+                            </div>
                             <!-- <div class="form-group">
                                 <label for="hotelLink">Hotel URL</label>
                                 <input type="text" id="hotelLink" name="hotelLink" class="form-control" value="<?php echo $arUser['hotelLink'];?>">

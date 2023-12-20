@@ -20,6 +20,8 @@ class ImageSlider
         $imgFileSize = $_FILES[$fieldId]['size'];
         if ($imgFileSize > 0)
         {
+            /*
+            //Newton has asked that this be removed on 20.12.2023
             //Get the count of the current images - should not exceed 3
             $rs =  Crud::select(
                 self::$table,
@@ -35,6 +37,7 @@ class ImageSlider
                     throw new Exception('You cannot add more than three images in the homepage slider!');
                 }
             }
+            */
 
             //upload image
             Image::$directory = 'images/hero-section/';

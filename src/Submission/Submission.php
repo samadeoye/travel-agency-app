@@ -26,6 +26,8 @@ class Submission
         $numChildren = doTypeCastInt($_REQUEST['numChildren']);
         $childrenAges = trim($_REQUEST['childrenAges']);
         $message = isset($_REQUEST['message']) ? trim($_REQUEST['message']) : '';
+        $tourId = isset($_REQUEST['tourId']) ? trim($_REQUEST['tourId']) : '';
+        $tourDestination = doTypeCastInt($_REQUEST['tourDestination']) ? trim($_REQUEST['tourDestination']) : 0;
         $action = trim($_REQUEST['action']);
         //$recaptchaResponse = trim($_REQUEST['g-recaptcha-response']); //only for verification
 
@@ -63,6 +65,8 @@ class Submission
             'numAdult' => $numAdult,
             'numChildren' => $numChildren,
             'childrenAges' => $childrenAges,
+            'tourId' => $tourId,
+            'tourDestination' => $tourDestination,
             'message' => $message
         ];
 
@@ -90,10 +94,50 @@ class Submission
         $rsx = Destination::getDestination($destinationId, ['name']);
         $destination = $rsx['name'];
         $type = getSubmissionType($typeId);
+        $submissionTypeLink = '';
+        if ($tourId != '')
+        {
+            if (strlen($tourId) == 36)
+            {
+                $table = DEF_TBL_TOURS;
+                $fieldName = 'title';
+                $path = 'tour-details';
+                if ($tourDestination == 1)
+                {
+                    $table = DEF_TBL_DESTINATIONS;
+                    $fieldName = 'name';
+                    $path = 'tour';
+                }
+                $rsx = Crud::select(
+                    $table,
+                    [
+                        'columns' => "{$fieldName}, short_name",
+                        'where' => [
+                            'id' => $tourId
+                        ]
+                    ]
+                );
+                if ($rsx)
+                {
+                    $name = $rsx[$fieldName];
+                    $shortName = $rsx['short_name'];
+                    $siteRootPath = DEF_FULL_ROOT_PATH;
+                    $type = $name;
+                    $submissionTypeLink = <<<EOQ
+                    {$siteRootPath}/{$path}?package={$shortName}
+EOQ;
+                }
+            }
+        }
 
         $startingMsg = self::getStartingMessage();
         $body = $startingMsg;
         $body .= "Submission Type: $type" . "\r\n";
+        if ($submissionTypeLink != '')
+        {
+            $body .= "Package Link:" . "\r\n";
+            $body .= $submissionTypeLink . "\r\n";
+        }
         $body .= "Name: $name" . "\r\n";
         $body .= "Email: $email" . "\r\n";
         $body .= "Mobile: $mobile" . "\r\n";
@@ -384,6 +428,44 @@ EOQ;*/
             ]
         ))
         {
+            $tourId = array_key_exists('tourId', $arDetails) ? $arDetails['tourId'] : '';
+            if ($tourId != '')
+            {
+                $tourDestination = array_key_exists('tourDestination', $arDetails) ? doTypeCastInt($arDetails['tourDestination']) : 0;
+                if (strlen($tourId) == 36 
+                    && array_key_exists('tourDestination', $arDetails)
+                )
+                {
+                    $tourDestination = doTypeCastInt($arDetails['tourDestination']);
+                    $table = DEF_TBL_TOURS;
+                    $fieldName = 'title';
+                    $path = 'tour-details';
+                    if ($tourDestination == 1)
+                    {
+                        $table = DEF_TBL_DESTINATIONS;
+                        $fieldName = 'name';
+                        $path = 'tour';
+                    }
+                    $rsx = Crud::select(
+                        $table,
+                        [
+                            'columns' => "{$fieldName}, short_name",
+                            'where' => [
+                                'id' => $tourId
+                            ]
+                        ]
+                    );
+                    if ($rsx)
+                    {
+                        $name = $rsx[$fieldName];
+                        $shortName = $rsx['short_name'];
+                        $siteRootPath = DEF_FULL_ROOT_PATH;
+                        $output .= <<<EOQ
+                        <p><strong>Package Link:</strong> <a href='{$siteRootPath}/{$path}?package={$shortName}'>{$name}</a></p>
+EOQ;
+                    }
+                }
+            }
             $output .= <<<EOQ
             <p><strong>Name:</strong> {$arDetails['name']}</p>
             <p><strong>Email:</strong> {$arDetails['email']}</p>

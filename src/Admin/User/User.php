@@ -147,10 +147,10 @@ EOQ;
                 'toName' => $name,
                 'mailFrom' => $arSiteSettings['email'],
                 'fromName' => $arSiteSettings['name'],
-                'isHtml' => true,
-                'bodyHtml' => $body
+                'subject' => 'Password Reset on '.$arSiteSettings['name'],
+                'body' => $body
             ];
-            SendMail::sendMail($arParams);
+            SendMail::sendCustomMail($arParams);
             if (SendMail::$isSent)
             {
                 $data = [

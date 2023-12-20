@@ -73,7 +73,7 @@ EOQ;
             return $options;
         }
 
-    public static function getCommonEnquiryForm()
+    public static function getCommonEnquiryForm($tourId='', $tourDestination=0)
     {
         $destinationsOptions = Destination::getDestinationsDropdownOptions();
         $countriesDropdownOptions = self::getCountriesDropdownOptions();
@@ -82,6 +82,8 @@ EOQ;
         return <<<EOQ
         <form class="row g-3" id="commonEnquiryForm" onsubmit="return false;">
             <input type="hidden" name="action" value="addCommonEnquiry">
+            <input type="hidden" name="tourId" value="{$tourId}">
+            <input type="hidden" name="tourDestination" value="{$tourDestination}">
             <div class="col-md-6">
                 <label for="name" class="form-label">Name</label>
                 <input type="name" class="form-control" id="name" name="name">
@@ -139,10 +141,11 @@ EOQ;
 EOQ;
     }
 
-    public static function getEnquireNowModal($action='addTourEnquiry')
+    public static function getEnquireNowModal($action='addTourEnquiry', $tourId='', $tourDestination=0)
     {
         $minDate = date('Y-m-d', strtotime('+1 days', strtotime(date('Y-m-d'))));
         $countriesDropdown = self::getCountriesDropdownOptions();
+        $destinationsDropdown = Destination::getDestinationsDropdownOptions();
 
         return <<<EOQ
 <div class="modal fade" id="enquireNowModal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="enquireNowModalLabel" aria-hidden="true">
@@ -157,6 +160,8 @@ EOQ;
             <div class="modal-body">
                 <form class="row g-3" id="tourEnquiryForm" onsubmit="return false;">
                 <input type="hidden" name="action" value="{$action}">
+                <input type="hidden" name="tourId" value="{$tourId}">
+                <input type="hidden" name="tourDestination" value="{$tourDestination}">
                 <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
                     <input type="name" class="form-control" id="name" name="name">
@@ -186,9 +191,7 @@ EOQ;
                 <div class="col-md-12">
                     <label for="destination" class="form-label">Destination</label>
                     <select id="destination" name="destination" class="form-select">
-                        <?php
-                            echo AbcTravels\Destination\Destination::getDestinationsDropdownOptions();
-                        ?>
+                        {$destinationsDropdown}
                     </select>
                 </div>
                 <label for="travellers" class="form-label">No. of Travellers</label>

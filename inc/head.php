@@ -78,7 +78,7 @@ AbcTravels\Analytics::logUserAnalytics();
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Subscribe<br><span style="font-size:15px;font-weight:normal;">Be the first to know about our sweet offers!</span></h5>
+          <h5 class="modal-title">Subscribe<br><span style="font-size:15px;font-weight:normal;"><?php echo $arSiteSettings['subscription_text'] ;?></span></h5>
           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
             <i class="fas fa-times"></i>
           </button>
@@ -202,7 +202,8 @@ AbcTravels\Analytics::logUserAnalytics();
           <div class="menu-sidebar-single-widget">
             <h5 class="menu-sidebar-title">Contact Info</h5>
             <div class="header-contact-info">
-              <span><i class="fa-solid fa-location-dot"></i><?php echo $arSiteSettings['address'];?></span>
+                <!--<i class="fa-solid fa-location-dot"></i>-->
+              <div><?php echo $arSiteSettings['address'];?></div>
               <span><a href="mailto:<?php echo $arSiteSettings['email'];?>"><i
                 class="fa-solid fa-envelope"></i><?php echo $arSiteSettings['email'];?></a> </span>
               <span><a href="tel:<?php echo $arSiteSettings['phone'];?>"><i class="fa-solid fa-phone"></i><?php echo $arSiteSettings['phone'];?></a></span>
