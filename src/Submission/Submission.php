@@ -10,6 +10,7 @@ class Submission
 {
     public static $table = DEF_TBL_SUBMISSIONS;
     static $data = [];
+    static $lineBreak = "<br>";//"\r\n";
 
     public static function addEnquiry()
     {
@@ -119,36 +120,37 @@ class Submission
                 );
                 if ($rsx)
                 {
-                    $name = $rsx[$fieldName];
+                    $tourName = $rsx[$fieldName];
                     $shortName = $rsx['short_name'];
                     $siteRootPath = DEF_FULL_ROOT_PATH;
-                    $type = $name;
+                    $type = $tourName;
                     $submissionTypeLink = <<<EOQ
-                    {$siteRootPath}/{$path}?package={$shortName}
+                    <a href='{$siteRootPath}/{$path}?package={$shortName}'>{$tourName}</a>
 EOQ;
                 }
             }
         }
 
         $startingMsg = self::getStartingMessage();
-        $body = $startingMsg;
-        $body .= "Submission Type: $type" . "\r\n";
+        //$body = $startingMsg;
+        $lineBreak = self::$lineBreak;
+        $body = "Submission Type: $type" . $lineBreak;
         if ($submissionTypeLink != '')
         {
-            $body .= "Package Link:" . "\r\n";
-            $body .= $submissionTypeLink . "\r\n";
+            $body .= "Package Link:" . $lineBreak;
+            $body .= $submissionTypeLink . $lineBreak;
         }
-        $body .= "Name: $name" . "\r\n";
-        $body .= "Email: $email" . "\r\n";
-        $body .= "Mobile: $mobile" . "\r\n";
-        $body .= "Nationality: $nationality" . "\r\n";
-        $body .= "Destination: $destination" . "\r\n";
-        $body .= "Arrival Date: $arrivalDate" . "\r\n";
-        $body .= "Departure Date: $departureDate" . "\r\n";
-        $body .= "Number of Adults: $numAdult" . "\r\n";
-        $body .= "Number of Children: $numChildren" . "\r\n";
-        $body .= "Ages of Children: $childrenAges" . "\r\n";
-        $body .= "Message: $message" . "\r\n";
+        $body .= "Name: $name" . $lineBreak;
+        $body .= "Email: $email" . $lineBreak;
+        $body .= "Mobile: $mobile" . $lineBreak;
+        $body .= "Nationality: $nationality" . $lineBreak;
+        $body .= "Destination: $destination" . $lineBreak;
+        $body .= "Arrival Date: $arrivalDate" . $lineBreak;
+        $body .= "Departure Date: $departureDate" . $lineBreak;
+        $body .= "Number of Adults: $numAdult" . $lineBreak;
+        $body .= "Number of Children: $numChildren" . $lineBreak;
+        $body .= "Ages of Children: $childrenAges" . $lineBreak;
+        $body .= "Message: $message" . $lineBreak;
         
         $arParams = [
             'mailTo' => $arSiteSettings['email'],
@@ -157,10 +159,17 @@ EOQ;
             'fromName' => $arSiteSettings['name'],
             //'arCC' => [$arSiteSettings['booking_email']],
             'subject' => self::getEmailSubject($type),
-            'body' => $body
+            'body' => $startingMsg.$body
         ];
         //SendMail::sendMail($arParams);
         //SendMail::sendDefaultMail($arParams);
+        SendMail::sendCustomMail($arParams);
+
+        //Send confirmation email to Customer
+        $startingMsg = self::getStartingMessage('customers', $name);
+        $arParams['mailTo'] = $email;
+        $arParams['toName'] = $name;
+        $arParams['body'] = $startingMsg.$body;
         SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
@@ -201,8 +210,7 @@ EOQ;
         $type = getSubmissionType(DEF_SUBMISSION_TYPE_CONTACT);
 
         $startingMsg = self::getStartingMessage();
-        $body = $startingMsg;
-        $body .= "Submission Type: $type" . "\r\n";
+        $body = "Submission Type: $type" . "\r\n";
         $body .= "Name: $name" . "\r\n";
         $body .= "Email: $email" . "\r\n";
         $body .= "Mobile: $mobile" . "\r\n";
@@ -215,8 +223,15 @@ EOQ;
             'mailFrom' => $arSiteSettings['email'],
             'fromName' => $arSiteSettings['name'],
             'subject' => self::getEmailSubject($subject),
-            'body' => $body
+            'body' => $startingMsg.$body
         ];
+        SendMail::sendCustomMail($arParams);
+
+        //Send confirmation email to Customer
+        $startingMsg = self::getStartingMessage('customers', $name);
+        $arParams['mailTo'] = $email;
+        $arParams['toName'] = $name;
+        $arParams['body'] = $startingMsg.$body;
         SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
@@ -270,8 +285,7 @@ EOQ;
         $type = getSubmissionType(DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR);
 
         $startingMsg = self::getStartingMessage();
-        $body = $startingMsg;
-        $body .= "Submission Type: $type" . "\r\n";
+        $body = "Submission Type: $type" . "\r\n";
         $body .= "Name: $name" . "\r\n";
         $body .= "Email: $email" . "\r\n";
         $body .= "Mobile: $mobile" . "\r\n";
@@ -287,9 +301,23 @@ EOQ;
             'mailFrom' => $arSiteSettings['email'],
             'fromName' => $arSiteSettings['name'],
             'subject' => self::getEmailSubject($type),
-            'body' => $body
+            'body' => $startingMsg.$body
         ];
         SendMail::sendCustomMail($arParams);
+
+        //Send confirmation email to Customer
+        $startingMsg = self::getStartingMessage('customers', $name);
+        $arParams['mailTo'] = $email;
+        $arParams['toName'] = $name;
+        $arParams['body'] = $startingMsg.$body;
+        SendMail::sendCustomMail($arParams);
+
+        $data['id'] = getNewId();
+        $data['cdate'] = time();
+        Crud::insert(
+            self::$table,
+            $data
+        );
 
         $data['id'] = getNewId();
         $data['cdate'] = time();
@@ -363,7 +391,7 @@ EOQ;
     public static function getSubmissionsList()
     {
         $rs = self::getSubmissions(['id', 'type_id', 'cdate']);
-        if(count($rs) > 0)
+        if (count($rs) > 0)
         {
             $rows = [];
             $sn = 1;
@@ -530,14 +558,26 @@ EOQ;
         return $output;
     }
 
-    protected static function getStartingMessage()
+    protected static function getStartingMessage($typeId='', $customerName='')
     {
         global $arSiteSettings;
 
         $siteName = $arSiteSettings['name'];
+        $lineBreak = self::$lineBreak;
 
-        $msg = "Hello Team,\r\n";
-        $msg .= "Please see below submission from $siteName" . "\r\n\r\n";
+        $msg = '';
+        if ($typeId == 'customers')
+        {
+            $msg = "Dear $customerName," . $lineBreak.$lineBreak;
+            $msg .= "This is to notify you that we have received your submission below as sent on $siteName. $lineBreak";
+            $msg .= "We will get back to you shortly." . $lineBreak.$lineBreak;
+        }
+        else
+        {
+            $msg = "Dear Team," . $lineBreak.$lineBreak;
+            $msg .= "Please see below submission from $siteName." . $lineBreak.$lineBreak;
+        }
+        
         return $msg;
     }
 

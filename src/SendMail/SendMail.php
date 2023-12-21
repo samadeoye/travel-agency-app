@@ -198,6 +198,7 @@ class SendMail
             }
         }
         $email->addContent("text/plain", $body);
+        $email->addContent("text/html", $body);
         $sendgrid = new SendGrid(DEF_SENDGRID_API_KEY);
         try
         {
