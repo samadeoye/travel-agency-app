@@ -301,11 +301,23 @@ function getRecaptcha()
         );
     }
 }
-function openEnquireNowModal()
+
+function openEnquireNowModal(submissionTypeId, modalTypeId)
 {
+    //alert(submissionTypeId + ' --- ' + modalTypeId);
     $('#enquireNowModal').modal('show');
     getRecaptcha();
+
+    if (submissionTypeId !== undefined)
+    {
+        $('#tourEnquiryForm #tourId').val(submissionTypeId);
+    }
+    if (modalTypeId !== undefined)
+    {
+        $('#tourEnquiryForm #tourDestination').val(modalTypeId);
+    }
 }
+
 function invokeTourEnquiryFormProcess()
 {
     var formId = '#tourEnquiryForm';
@@ -315,8 +327,13 @@ function invokeTourEnquiryFormProcess()
     var nationality = $(formId+' #nationality').val();
     var destination = $(formId+' #destination').val();
     var numAdult = $(formId+' #numAdult').val();
+    var termsConditionsChecked = $(formId+' #termsConditions').is(':checked');
 
-    if (name.length < 3 || email.length < 13 || mobile.length < 6 || nationality.length < 3 || destination.length < 3 || numAdult.length < 1)
+    if (!termsConditionsChecked)
+    {
+        throwError('Please read and check the Terms and Conditions', 'toast-top-right');
+    }
+    else if (name.length < 3 || email.length < 13 || mobile.length < 6 || nationality.length < 3 || destination.length < 3 || numAdult.length < 1)
     {
         throwError('Please fill all required fields with valid details.', 'toast-top-right');
     }
@@ -381,8 +398,13 @@ $(document).ready(function() {
         var nationality = $(formId+' #nationality').val();
         var destination = $(formId+' #destination').val();
         var numAdult = $(formId+' #numAdult').val();
+        var termsConditionsChecked = $(formId+' #termsConditions').is(':checked');
 
-        if (name.length < 3 || email.length < 13 || mobile.length < 6 || nationality.length < 3 || destination.length < 3 || numAdult.length < 1)
+        if (!termsConditionsChecked)
+        {
+            throwError('Please read and check the Terms and Conditions', 'toast-top-right');
+        }
+        else if (name.length < 3 || email.length < 13 || mobile.length < 6 || nationality.length < 3 || destination.length < 3 || numAdult.length < 1)
         {
             throwError('Please fill all required fields with valid details.', 'toast-top-right');
         }

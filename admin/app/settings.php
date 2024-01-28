@@ -76,10 +76,14 @@ require_once DEF_DOC_ROOT_ADMIN.'inc/head.php';
                                 <label for="subscriptionPopupText">Subscription Popup Text</label>
                                 <input type="text" id="subscriptionPopupText" name="subscriptionPopupText" class="form-control" value="<?php echo $arUser['subscriptionText'];?>">
                             </div>
-                            <!-- <div class="form-group">
+                            <div class="form-group">
+                                <label for="hotelLink">Hotel Name</label>
+                                <input type="text" id="hotelName" name="hotelName" class="form-control" value="<?php echo $arUser['hotelName'];?>">
+                            </div>
+                            <div class="form-group">
                                 <label for="hotelLink">Hotel URL</label>
                                 <input type="text" id="hotelLink" name="hotelLink" class="form-control" value="<?php echo $arUser['hotelLink'];?>">
-                            </div> -->
+                            </div>
                             <div class="form-group">
                                 <label for="siteFacebook">Facebook URL</label>
                                 <input type="text" id="siteFacebook" name="siteFacebook" class="form-control" value="<?php echo $arUser['siteFacebook'];?>">

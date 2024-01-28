@@ -115,6 +115,9 @@ require_once 'inc/head.php';
                                 </div>
                             </div>
                             <div class="col-md-12">
+                                <?php echo AbcTravels\Functions::getTermsAndConditionCheckbox(); ?>
+                            </div>
+                            <div class="col-md-12">
                                 <div class="googleRecaptcha" id="contactFormRecaptcha"></div>
                             </div>
                             <div class="col-12">
@@ -141,8 +144,13 @@ $('#contactForm #btnSubmit').click(function ()
     var email = $(formId+' #email').val();
     var mobile = $(formId+' #mobile').val();
     var message = $(formId+' #message').val();
+    var termsConditionsChecked = $(formId+' #termsConditions').is(':checked');
 
-    if (name.length < 3 || email.length < 13 || mobile.length < 6 || message.length < 20)
+    if (!termsConditionsChecked)
+    {
+        throwError('Please read and check the Terms and Conditions', 'toast-top-right');
+    }
+    else if (name.length < 3 || email.length < 13 || mobile.length < 6 || message.length < 20)
     {
         throwError('Please fill all required fields with valid details.', 'toast-top-right');
     }

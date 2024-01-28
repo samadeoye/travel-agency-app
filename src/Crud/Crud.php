@@ -247,15 +247,20 @@ class Crud
         return false;
     }
 
-    public static function checkDuplicate($table, $field, $value, $id='')
+    public static function checkDuplicate($table, $field, $value, $id='', $checkDeleted=false)
     {
+        $arWhere = [
+            $field => $value
+        ];
+        if ($checkDeleted)
+        {
+            $arWhere['deleted'] = 0;
+        }
         $rs = Crud::select(
             $table,
             [
                 'columns' => 'id',
-                'where' => [
-                    $field => $value
-                ]
+                'where' => $arWhere
             ]
         );
         if ($rs)

@@ -215,6 +215,7 @@ class Param
             case 'addCommonEnquiry':
             case 'addTourEnquiry':
             case 'addHotelEnquiry':
+            case 'addVehicleEnquiry':
                 $data = [
                     'name' => [
                         'method' => 'post',

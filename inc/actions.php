@@ -54,6 +54,7 @@ try
         case 'addCommonEnquiry':
         case 'addTourEnquiry':
         case 'addHotelEnquiry':
+        case 'addVehicleEnquiry':
             Submission::addEnquiry();
         break;
 

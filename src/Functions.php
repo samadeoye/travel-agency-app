@@ -78,6 +78,7 @@ EOQ;
         $destinationsOptions = Destination::getDestinationsDropdownOptions();
         $countriesDropdownOptions = self::getCountriesDropdownOptions();
         $minDate = date('Y-m-d', strtotime('+1 days', strtotime(date('Y-m-d'))));
+        $termsAndConditions = self::getTermsAndConditionCheckbox();
 
         return <<<EOQ
         <form class="row g-3" id="commonEnquiryForm" onsubmit="return false;">
@@ -132,6 +133,9 @@ EOQ;
                 <textarea class="form-control" name="message" id="message" cols="30" rows="4"></textarea>
             </div>
             <div class="col-md-12">
+                {$termsAndConditions}
+            </div>
+            <div class="col-md-12">
                 <div class="googleRecaptcha" id="commonEnquiryFormRecaptcha"></div>
             </div>
             <div class="col-12">
@@ -141,11 +145,21 @@ EOQ;
 EOQ;
     }
 
+    public static function getTermsAndConditionCheckbox()
+    {
+        $termsAndConditionsLink = DEF_FULL_ROOT_PATH . '/terms';
+        return <<<EOQ
+        <input style="display:inline-block;width:5%;" type="checkbox" class="form-control" id="termsConditions" name="termsConditions">
+        <label style="display:inline-block;width:92%;">By clicking here, I state that I have read and understood the terms and conditions. <a href="{$termsAndConditionsLink}" target="_blank">Read it here.</a></label>
+EOQ;
+    }
+
     public static function getEnquireNowModal($action='addTourEnquiry', $tourId='', $tourDestination=0)
     {
         $minDate = date('Y-m-d', strtotime('+1 days', strtotime(date('Y-m-d'))));
         $countriesDropdown = self::getCountriesDropdownOptions();
         $destinationsDropdown = Destination::getDestinationsDropdownOptions();
+        $termsAndConditions = self::getTermsAndConditionCheckbox();
 
         return <<<EOQ
 <div class="modal fade" id="enquireNowModal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="enquireNowModalLabel" aria-hidden="true">
@@ -160,8 +174,8 @@ EOQ;
             <div class="modal-body">
                 <form class="row g-3" id="tourEnquiryForm" onsubmit="return false;">
                 <input type="hidden" name="action" value="{$action}">
-                <input type="hidden" name="tourId" value="{$tourId}">
-                <input type="hidden" name="tourDestination" value="{$tourDestination}">
+                <input type="hidden" id="tourId" name="tourId" value="{$tourId}">
+                <input type="hidden" id="tourDestination" name="tourDestination" value="{$tourDestination}">
                 <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
                     <input type="name" class="form-control" id="name" name="name">
@@ -208,6 +222,9 @@ EOQ;
                 <div class="col-md-12">
                     <label for="destination" class="form-label">Message</label>
                     <textarea class="form-control" name="message" id="message" cols="30" rows="4"></textarea>
+                </div>
+                <div class="col-md-12">
+                    {$termsAndConditions}
                 </div>
                 <div class="col-md-12">
                     <div class="googleRecaptcha" id="tourFormRecaptcha"></div>

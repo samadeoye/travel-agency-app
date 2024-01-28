@@ -135,12 +135,14 @@ class User
             $siteName = $arSiteSettings['name'];
             $siteRootPath = DEF_FULL_ROOT_PATH;
 
-            $body = <<<EOQ
-                Dear {$rs['fname']},<br>
-                Use the link below to complete your password reset on {$siteName}.<br>
-                <a href="{$siteRootPath}/app/resetpassword?token={$id}">Reset Password</a>
-
+            $firstName = $rs['fname'];
+            $passResetLink = <<<EOQ
+            <a href="{$siteRootPath}/app/resetpassword?token={$id}">Reset Password</a>
 EOQ;
+
+            $body = "Dear $firstName," . "\r\n";
+            $body .= "Use the link below to complete your password reset on $siteName." . "\r\n";
+            $body .= "$passResetLink" . "\r\n";
 
             $arParams = [
                 'mailTo' => $email,
@@ -148,7 +150,8 @@ EOQ;
                 'mailFrom' => $arSiteSettings['email'],
                 'fromName' => $arSiteSettings['name'],
                 'subject' => 'Password Reset on '.$arSiteSettings['name'],
-                'body' => $body
+                'body' => $body,
+                'addCC' => false
             ];
             SendMail::sendCustomMail($arParams);
             if (SendMail::$isSent)

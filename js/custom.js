@@ -167,6 +167,8 @@
             speed: 1500,
             rtl: false,
             vertical: true,
+            pauseOnHover: false,
+            pauseOnFocus: false,
             prevArrow:
                 "<button type='button' class='slider-arrow-btn prev-btn'><i class='fa-solid fa-angle-left'></i></button>",
             nextArrow:

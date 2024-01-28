@@ -18,7 +18,7 @@ class Vehicle
         $otherDetails = trim($_REQUEST['otherDetails']);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 
-        if (Crud::checkDuplicate(self::$table, 'name', $name, $id))
+        if (Crud::checkDuplicate(self::$table, 'name', $name, $id, true))
         {
             throw new Exception('Record with this name already exists.');
         }
@@ -229,7 +229,7 @@ EOQ;
                             <span class="content-title"><a href="javascript:;" class="font-size-15">{$passengers} passengers</a></span>
                             <span>{$otherDetails}</span>
                             <div class="btn-wrapper">
-                                <a href="javascript:;" onclick="showFullVehicleImg('{$id}')" class="theme-btn theme-btn-padding-2">View Full Image <i class="fas fa-eye"></i></a>
+                                <a href="javascript:;" onclick="openEnquireNowModal('{$id}', 2)" class="theme-btn theme-btn-padding-2">Book now <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>

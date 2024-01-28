@@ -36,7 +36,7 @@ require_once 'inc/head.php';
             <div class="col-12 ">
                 <div class="section-title text-start">
                     <div class="sec-content">
-                        <h2 class="title font-size-25">Featured Hotel Rooms - Regal Reseau Hotel & Spa Negombo Beach</h2>
+                        <h2 class="title font-size-25">Featured Hotel Rooms - <?php echo $arSiteSettings['hotel_name'];?> <a class="theme-btn theme-btn-padding-2" href="<?php echo $arSiteSettings['hotel_link'];?>" target="_blank"> Visit Hotel </a> </h2>
                         <img class="bottom-shape" src="images/shape/bottom-bar.png" alt="Bottom Shape">
                     </div>
                 </div>

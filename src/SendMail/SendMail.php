@@ -177,9 +177,10 @@ class SendMail
         $fromName = $arParams['fromName'];
         $subject =  $arParams['subject'];
         $body = $arParams['body'];
+        $addCC = array_key_exists('addCC', $arParams) ? $arParams['addCC'] : true;
 
         $arCC = [];
-        if ($arSiteSettings['booking_email'] != '')
+        if ($addCC && $arSiteSettings['booking_email'] != '')
         {
             $mailTo = $arSiteSettings['booking_email'];
             $toName = 'Booking Admin';

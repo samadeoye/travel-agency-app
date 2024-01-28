@@ -57,6 +57,11 @@ require_once 'inc/head.php';
     </div>
 </div>
 
+<!-- Enquire Now Modal -->
+<?php
+    echo AbcTravels\Functions::getEnquireNowModal('addVehicleEnquiry');
+?>
+
 <?php
 $arAdditionalJs[] = <<<EOQ
 function showPagination(page)

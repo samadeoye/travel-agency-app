@@ -6451,10 +6451,13 @@ body.admin-bar .header-menu-area.sticky_menu {
   position: relative;
   z-index: 2;
   height: 959px;
+  /* height: 500px !important; */
 }
 @media (max-width: 1200px) {
   .slider-area .single-slider {
-    height: 700px;
+    /* height: 700px; */
+    height: auto;
+    /* height: 500px !important; */
   }
 }
 @media only screen and (min-width: 0px) and (max-width: 767px) {
@@ -6702,6 +6705,8 @@ body.admin-bar .header-menu-area.sticky_menu {
   .slider-area.style-2 {
     margin: 0px;
     border-radius: 0px;
+    /* added by Sam */
+    /* height: 100px !important; */
   }
 }
 .slider-area.style-2 .slick-slide {
@@ -6795,7 +6800,9 @@ body.admin-bar .header-menu-area.sticky_menu {
 .slider-area.style-2 .slider-content-wrapper {
   margin-top: 0px;
   padding-top: 161px;
-  padding-bottom: 267px;
+  /* padding-top: 200px; */
+   /* padding-bottom: 267px; */
+  padding-bottom: 270px;
 }
 @media (max-width: 992px) {
   .slider-area.style-2 .slider-content-wrapper {
@@ -11608,4 +11615,10 @@ input, select, textarea
 .color-p
 {
   color: #c7cdda;
+}
+
+#termsConditions
+{
+  background: #C0C0C0 !important;
+  border: 1px solid #0291d3;
 }

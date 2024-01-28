@@ -15,10 +15,10 @@ class Hotel
     {
         $name = stringToUpper(trim($_REQUEST['name']));
         $details = trim($_REQUEST['details']);
-        $link = trim($_REQUEST['link']);
+        //$link = trim($_REQUEST['link']);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 
-        if (Crud::checkDuplicate(self::$table, 'name', $name, $id))
+        if (Crud::checkDuplicate(self::$table, 'name', $name, $id, true))
         {
             throw new Exception('Record with this name already exists.');
         }
@@ -34,7 +34,7 @@ class Hotel
         
         $data = [
             'name' => $name,
-            'link' => $link,
+            //'link' => $link,
             'details' => $details
         ];
         if ($fileName != '')
@@ -79,7 +79,7 @@ class Hotel
 
     public static function getHotelRoomsList()
     {
-        $rs = self::getHotelRooms(['id, name, img, details, link, cdate, mdate']);
+        $rs = self::getHotelRooms(['id, name, img, details, cdate, mdate']);
         if(count($rs) > 0)
         {
             $rows = [];

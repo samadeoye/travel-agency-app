@@ -49,7 +49,8 @@ class Login
                     $rs['licenseNumber'] = $rsx['license_number'];
                     $rs['setSubscriptionPopup'] = $rsx['set_subscription_popup'];
                     $rs['subscriptionText'] = $rsx['subscription_text'];
-                    //$rs['hotelLink'] = $rsx['hotel_link'];
+                    $rs['hotelName'] = $rsx['hotel_name'];
+                    $rs['hotelLink'] = $rsx['hotel_link'];
                     $rs['siteFacebook'] = $rsx['facebook'];
                     $rs['siteTwitter'] = $rsx['twitter'];
                     $rs['siteInstagram'] = $rsx['instagram'];

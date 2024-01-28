@@ -560,6 +560,9 @@ function getSubmissionType($typeId)
     case DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY:
       $title = 'Hotel Enquiry';
     break;
+    case DEF_SUBMISSION_TYPE_VEHICLE_ENQUIRY:
+      $title = 'Vehicle Enquiry';
+    break;
   }
 
   return $title;

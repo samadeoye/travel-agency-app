@@ -18,7 +18,8 @@ class Settings
         $licenseNumber = trim($_REQUEST['licenseNumber']);
         $setSubscriptionPopup = doTypeCastInt($_REQUEST['setSubscriptionPopup']);
         $subscriptionPopupText = trim($_REQUEST['subscriptionPopupText']);
-        //$hotelLink = trim($_REQUEST['hotelLink']);
+        $hotelName = trim($_REQUEST['hotelName']);
+        $hotelLink = trim($_REQUEST['hotelLink']);
         $siteFacebook = trim($_REQUEST['siteFacebook']);
         $siteTwitter = trim($_REQUEST['siteTwitter']);
         $siteInstagram = trim($_REQUEST['siteInstagram']);
@@ -35,7 +36,8 @@ class Settings
             'license_number' => $licenseNumber,
             'set_subscription_popup' => $setSubscriptionPopup,
             'subscription_text' => $subscriptionPopupText,
-            //'hotel_link' => $hotelLink,
+            'hotel_name' => $hotelName,
+            'hotel_link' => $hotelLink,
             'facebook' => $siteFacebook,
             'twitter' => $siteTwitter,
             'instagram' => $siteInstagram,
@@ -60,7 +62,8 @@ class Settings
             $rs['licenseNumber'] = $licenseNumber;
             $rs['setSubscriptionPopup'] = $setSubscriptionPopup;
             $rs['subscriptionPopupText'] = $subscriptionPopupText;
-            //$rs['hotelLink'] = $hotelLink;
+            $rs['hotelName'] = $hotelName;
+            $rs['hotelLink'] = $hotelLink;
             $rs['siteFacebook'] = $siteFacebook;
             $rs['siteTwitter'] = $siteTwitter;
             $rs['siteInstagram'] = $siteInstagram;

@@ -79,6 +79,9 @@ class Submission
             case 'addHotelEnquiry':
                 $typeId = DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY;
             break;
+            case 'addVehicleEnquiry':
+                $typeId = DEF_SUBMISSION_TYPE_VEHICLE_ENQUIRY;
+            break;
             default:
                 $typeId = DEF_SUBMISSION_TYPE_COMMON_ENQUIRY;
             break;
@@ -100,19 +103,34 @@ class Submission
         {
             if (strlen($tourId) == 36)
             {
-                $table = DEF_TBL_TOURS;
-                $fieldName = 'title';
-                $path = 'tour-details';
-                if ($tourDestination == 1)
+                switch($tourDestination)
                 {
-                    $table = DEF_TBL_DESTINATIONS;
-                    $fieldName = 'name';
-                    $path = 'tour';
+                    case 1:
+                        $table = DEF_TBL_DESTINATIONS;
+                        $fieldName = 'name';
+                        $path = 'tour';
+                    break;
+                    case 2:
+                        $table = DEF_TBL_VEHICLES;
+                        $fieldName = 'name';
+                        $path = 'vehicles';
+                    break;
+                    default:
+                        $table = DEF_TBL_TOURS;
+                        $fieldName = 'title';
+                        $path = 'tour-details';
+                    break;
+                }
+
+                $columns = $fieldName;
+                if ($tourDestination != 2)
+                {
+                    $columns .= ", short_name";
                 }
                 $rsx = Crud::select(
                     $table,
                     [
-                        'columns' => "{$fieldName}, short_name",
+                        'columns' => "{$columns}",
                         'where' => [
                             'id' => $tourId
                         ]
@@ -121,11 +139,20 @@ class Submission
                 if ($rsx)
                 {
                     $tourName = $rsx[$fieldName];
-                    $shortName = $rsx['short_name'];
+                    
                     $siteRootPath = DEF_FULL_ROOT_PATH;
                     $type = $tourName;
+
+                    $submissionTypeHref = "$siteRootPath/$path";
+
+                    if ($tourDestination != 2)
+                    {
+                        $shortName = $rsx['short_name'];
+                        $submissionTypeHref .= "?package=$shortName";
+                    }
+                    
                     $submissionTypeLink = <<<EOQ
-                    <a href='{$siteRootPath}/{$path}?package={$shortName}'>{$tourName}</a>
+                    <a href='{$submissionTypeHref}'>{$tourName}</a>
 EOQ;
                 }
             }
@@ -137,7 +164,12 @@ EOQ;
         $body = "Submission Type: $type" . $lineBreak;
         if ($submissionTypeLink != '')
         {
-            $body .= "Package Link:" . $lineBreak;
+            $lblPackageLink = 'Package Link';
+            if ($tourDestination == 2)
+            {
+                $lblPackageLink = 'Link';
+            }
+            $body .= $lblPackageLink.":" . $lineBreak;
             $body .= $submissionTypeLink . $lineBreak;
         }
         $body .= "Name: $name" . $lineBreak;
@@ -169,7 +201,9 @@ EOQ;
         $startingMsg = self::getStartingMessage('customers', $name);
         $arParams['mailTo'] = $email;
         $arParams['toName'] = $name;
+        $arParams['subject'] = self::getEmailSubject($type, 'customers');
         $arParams['body'] = $startingMsg.$body;
+        $arParams['addCC'] = false;
         SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
@@ -231,7 +265,9 @@ EOQ;
         $startingMsg = self::getStartingMessage('customers', $name);
         $arParams['mailTo'] = $email;
         $arParams['toName'] = $name;
+        $arParams['subject'] = self::getEmailSubject($type, 'customers');
         $arParams['body'] = $startingMsg.$body;
+        $arParams['addCC'] = false;
         SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
@@ -309,7 +345,9 @@ EOQ;
         $startingMsg = self::getStartingMessage('customers', $name);
         $arParams['mailTo'] = $email;
         $arParams['toName'] = $name;
+        $arParams['subject'] = self::getEmailSubject($type, 'customers');
         $arParams['body'] = $startingMsg.$body;
+        $arParams['addCC'] = false;
         SendMail::sendCustomMail($arParams);
 
         $data['id'] = getNewId();
@@ -451,6 +489,7 @@ EOQ;*/
                 DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
                 , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
                 , DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY
+                , DEF_SUBMISSION_TYPE_VEHICLE_ENQUIRY
                 , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
                 , DEF_SUBMISSION_TYPE_CONTACT
             ]
@@ -465,19 +504,35 @@ EOQ;*/
                 )
                 {
                     $tourDestination = doTypeCastInt($arDetails['tourDestination']);
-                    $table = DEF_TBL_TOURS;
-                    $fieldName = 'title';
-                    $path = 'tour-details';
-                    if ($tourDestination == 1)
+                    switch($tourDestination)
                     {
-                        $table = DEF_TBL_DESTINATIONS;
-                        $fieldName = 'name';
-                        $path = 'tour';
+                        case 1:
+                            $table = DEF_TBL_DESTINATIONS;
+                            $fieldName = 'name';
+                            $path = 'tour';
+                        break;
+                        case 2:
+                            $table = DEF_TBL_VEHICLES;
+                            $fieldName = 'name';
+                            $path = 'vehicles';
+                        break;
+                        default:
+                            $table = DEF_TBL_TOURS;
+                            $fieldName = 'title';
+                            $path = 'tour-details';
+                        break;
                     }
+
+                    $columns = $fieldName;
+                    if ($tourDestination != 2)
+                    {
+                        $columns .= ", short_name";
+                    }
+                    
                     $rsx = Crud::select(
                         $table,
                         [
-                            'columns' => "{$fieldName}, short_name",
+                            'columns' => "{$columns}",
                             'where' => [
                                 'id' => $tourId
                             ]
@@ -486,10 +541,18 @@ EOQ;*/
                     if ($rsx)
                     {
                         $name = $rsx[$fieldName];
-                        $shortName = $rsx['short_name'];
+
                         $siteRootPath = DEF_FULL_ROOT_PATH;
+                        $packageHref = "$siteRootPath/$path";
+                        $lblPackageLink = 'Link';
+                        if ($tourDestination != 2)
+                        {
+                            $shortName = $rsx['short_name'];
+                            $packageHref .= "?package=$shortName";
+                            $lblPackageLink = 'Package Link';
+                        }
                         $output .= <<<EOQ
-                        <p><strong>Package Link:</strong> <a href='{$siteRootPath}/{$path}?package={$shortName}'>{$name}</a></p>
+                        <p><strong>{$lblPackageLink}:</strong> <a href='{$packageHref}'>{$name}</a></p>
 EOQ;
                     }
                 }
@@ -503,6 +566,7 @@ EOQ;
                 DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
                 , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
                 , DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY
+                , DEF_SUBMISSION_TYPE_VEHICLE_ENQUIRY
                 , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
             ]))
             {
@@ -537,6 +601,7 @@ EOQ;
                         DEF_SUBMISSION_TYPE_COMMON_ENQUIRY
                         , DEF_SUBMISSION_TYPE_TOUR_ENQUIRY
                         , DEF_SUBMISSION_TYPE_HOTEL_ENQUIRY
+                        , DEF_SUBMISSION_TYPE_VEHICLE_ENQUIRY
                         , DEF_SUBMISSION_TYPE_CUSTOMIZED_TOUR
                     ]
                 ))
@@ -581,11 +646,16 @@ EOQ;
         return $msg;
     }
 
-    protected static function getEmailSubject($text)
+    protected static function getEmailSubject($text, $typeId='')
     {
         global $arSiteSettings;
 
-        $subject = "Mail From ".$arSiteSettings['name'];
+        $subjectPrefix = "Mail From ";
+        if ($typeId == 'customers')
+        {
+            $subjectPrefix = "Confirmation From ";
+        }
+        $subject = $subjectPrefix.$arSiteSettings['name'];
         if ($text != '')
         {
             $subject .= " - $text";

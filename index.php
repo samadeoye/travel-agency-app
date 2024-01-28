@@ -2,7 +2,6 @@
 require_once 'inc/utils.php';
 use AbcTravels\Tour\Tour;
 use AbcTravels\Functions;
-use AbcTravels\ImageSlider\ImageSlider;
 $pageTitle = 'Home';
 require_once 'inc/head.php';
 ?>

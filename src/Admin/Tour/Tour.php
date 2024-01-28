@@ -70,7 +70,7 @@ class Tour
         $itenaryDayTravelTimes = implode('|', $arItenaryDayTravelTimes);
         $itenaryDayTransferModes = implode('|', $arItenaryDayTransferModes);
 
-        if (Crud::checkDuplicate(self::$table, 'title', $title, $id))
+        if (Crud::checkDuplicate(self::$table, 'title', $title, $id, true))
         {
             throw new Exception('Record with this title already exists');
         }
@@ -141,7 +141,7 @@ class Tour
         $id = $_REQUEST['id'];
         $name = stringToUpper(trim($_REQUEST['name']));
 
-        if (Crud::checkDuplicate(self::$table, 'name', $name, $id))
+        if (Crud::checkDuplicate(self::$table, 'name', $name, $id, true))
         {
             throw new Exception('Record with this name already exists');
         }

@@ -19,7 +19,7 @@ class Destination
         $name = stringToUpper(trim($_REQUEST['name']));
         $faqs = strip_tags(stripslashes(trim($_REQUEST['faqs'])), $allowedTags);
 
-        if (Crud::checkDuplicate(self::$table, 'name', $name))
+        if (Crud::checkDuplicate(self::$table, 'name', $name, '', true))
         {
             throw new Exception('Record with this name already exists.');
         }
